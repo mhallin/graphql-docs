@@ -1,0 +1,10 @@
+@import "./_normalize.css";
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 800px;
+}

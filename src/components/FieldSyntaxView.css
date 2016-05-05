@@ -1,0 +1,15 @@
+.container {
+    margin-bottom: 0.2rem;
+}
+
+.name {
+    composes: fieldName from "./_base.css";
+}
+
+.argumentName {
+    composes: argumentName from "./_base.css";
+}
+
+.defaultValue {
+    composes: defaultValue from "./_base.css";
+}

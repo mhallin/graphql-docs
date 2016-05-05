@@ -1,0 +1,27 @@
+.table {
+    margin-top: 1rem;
+    margin-left: 2rem;
+    width: 100%;
+}
+
+.header {
+    text-align: left;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.key {
+    composes: argumentCell from "./_base.css";
+}
+
+.value {
+    width: 100%;
+}
+
+.row {
+    composes: argumentRow from "./_base.css";
+}
+
+.argumentName {
+    composes: argumentName from "./_base.css";
+}

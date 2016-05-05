@@ -1,0 +1,35 @@
+:root {
+    --typeNameColor: #007400;
+}
+
+.argumentName {
+    color: #5b2699;
+}
+
+.argumentCell {
+    padding-right: 1rem;
+    white-space: nowrap;
+}
+
+.argumentRow {
+    line-height: 1.3;
+}
+
+.fieldName {
+    color: #64381f;
+}
+
+.defaultValue {
+    color: #836c28;
+}
+
+.typeName {
+    color: var(--typeNameColor);
+}
+
+.typeLink,
+.typeLink:active,
+.typeLink:hover,
+.typeLink:visited {
+    color: var(--typeNameColor);
+}

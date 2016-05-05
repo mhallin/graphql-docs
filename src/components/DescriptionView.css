@@ -1,0 +1,30 @@
+.container :first-child {
+    margin-top: 0;
+}
+
+.container :last-child {
+    margin-bottom: 0;
+}
+
+.container h1 {
+    font-size: 1.3em;
+}
+
+.container h2 {
+    font-size: 1.1em;
+}
+
+.container h3 {
+    font-size: 1em;
+    font-variant: small-caps;
+}
+
+.container blockquote {
+    border-left: 8px solid #e8e8e8;
+    margin-top: -0.3em;
+    padding-top: 0.3em;
+    margin-left: 20px;
+    padding-left: 12px;
+    margin-bottom: -0.5em;
+    padding-bottom: 0.5em;
+}

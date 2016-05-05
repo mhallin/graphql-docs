@@ -1,0 +1,13 @@
+[ignore]
+.*/out_html/.*
+.*/node_modules/fbjs/.*
+.*/node_modules/json5/.*
+
+[include]
+src
+
+[options]
+module.name_mapper='^\(.*\.css\)$' -> '\1.flow.js'
+module.name_mapper='^\(.*\.txt\)$' -> '\1.flow.js'
+
+esproposal.class_static_fields=enable

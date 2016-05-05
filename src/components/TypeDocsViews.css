@@ -1,0 +1,32 @@
+.type {
+    margin-bottom: 20px;
+}
+
+.heading {
+    margin-bottom: 0.5rem;
+}
+
+.subHeading {
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #4a4a4a;
+    border-bottom: 1px solid #d9d9d9;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.interfacesList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.enumName {
+    composes: argumentName from "./_base.css";
+    composes: argumentCell from "./_base.css";
+}
+
+.enumRow {
+    composes: argumentRow from "./_base.css";
+}

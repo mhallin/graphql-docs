@@ -1,0 +1,3 @@
+.typeRef {
+    composes: typeLink from "./_base.css";
+}
