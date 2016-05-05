@@ -15,15 +15,11 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "css-loader": "^0.23.1",
-    "es6-promise": "^3.1.2",
     "eslint": "^2.8.0",
     "eslint-plugin-flow-vars": "^0.3.0",
     "eslint-plugin-flowtype": "^2.2.7",
     "eslint-plugin-react": "^5.0.1",
-    "exports-loader": "^0.6.3",
     "expose-loader": "^0.7.1",
-    "imports-loader": "^0.6.5",
-    "isomorphic-fetch": "^2.2.1",
     "marked": "^0.3.5",
     "postcss-cssnext": "^2.5.2",
     "postcss-loader": "^0.8.2",
@@ -33,7 +29,6 @@
     "react-hot-loader": "^3.0.0-alpha.13",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "^1.14.1",
     "yargs": "^4.7.0"
   }
 }
