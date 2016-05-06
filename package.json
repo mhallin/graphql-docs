@@ -42,7 +42,6 @@
     "postcss-cssnext": "^2.5.2",
     "postcss-loader": "^0.8.2",
     "raw-loader": "^0.5.1",
-    "react-hot-loader": "^3.0.0-alpha.13",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"
   }
