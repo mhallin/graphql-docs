@@ -4,7 +4,7 @@
   "description": "Dynamic documentation for GraphQL endpoints",
   "main": "dist/graphql-docs.js",
   "author": "Magnus Hallin <mhallin@fastmail.com>",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "files": [
     "dist/",
     "src/",
@@ -15,6 +15,18 @@
     "test": "echo 'No tests yet :-('",
     "lint": "./node_modules/.bin/eslint src",
     "flow": "./node_modules/.bin/flow check"
+  },
+  "keywords": ["graphql", "react", "docs", "documentation"],
+  "homepage": "https://github.com/mhallin/graphql-docs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhallin/graphql-docs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mhallin/graphql-docs/issues"
+  },
+  "engines": {
+    "node": ">= 4.4.0"
   },
   "peerDependencies": {
     "react": "^15.0.1",
