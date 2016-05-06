@@ -23,6 +23,7 @@ deploy:
       branch: master
 
   - provider: npm
+    email: mhallin@fastmail.com
     api_key:
       secure: CYcqZiNOcwUwiNKwpOj23IiEMc80DVoGLJB0gxVbuIE4lkzdZPTYOdHBlCvqyUB9WtR5VL1j8sJ8GZ2jyVqyuf2+jbzIC1DjVPXeYBHKBvj1NIuPdrFHlN9Bm3lAUjZbg5m6eVMF1DZVwGn7J7TDApzbvsD4rtmuivRALrkEUD1ASVPB2xS9DNe9/SF9uOj7IGmzI+8sXF91fm/p/+l+zf1o9gUp0PQ9DAXWdY20SMt2EDx7jeFIPVp2+mmpB7MMnrKPykCbNBIU4vcQH0kpyMhwup9gux7vLkYQgMa6VhWwfhnnxOurcXEFkI08QOArHZZMpdv0WCs5CFpzkuTXDXgE3kRr/1KR6wCbTVyQJcASz2HaLf6C+XhN8A8P9XlCERawIjOecQoGFO/DtqgsPGj053IBn9Bg+th0evxCiaxjmYqTxZd91g0rm5gcF2qFlip+Y/2k4nBS/fcFDHvsj+rUcG+zuBi5vc1/z7r0wBvi86ZjovgRYBJ6mD6B9XcSgw+WQ7Due5KP7pe8pv/3M7e3FLKb0ffZRzvPG+O+TVEsDu5xgz/WjbmUbnRQz5vN7bDgAMe63pelGVguZMFcPmkwfOjEEREq1yk5Wj/Y1tqbX36bnTL5JCmbutGu6iXC0mGDJkEP92Di4NK6Y2PL8cnPTTZQN/SnhvJPfUp36V0=
     skip_cleanup: true
