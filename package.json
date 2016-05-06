@@ -1,6 +1,6 @@
 {
   "name": "graphql-docs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Dynamic documentation for GraphQL endpoints",
   "main": "dist/graphql-docs.js",
   "author": "Magnus Hallin <mhallin@fastmail.com>",
