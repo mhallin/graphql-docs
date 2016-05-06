@@ -10,7 +10,6 @@ function fetcher(query) {
         method: 'POST',
         headers: {
             Accept: 'application/json',
-            Authorization: 'Basic Z3JhcGhpcWw6Z1B1N3ZIWWhKU25McnVmT3Y0aXBMWGgwODZFQlRVRkYxbk5EQ1dCOUZuUTVnQnMyU3U=',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
