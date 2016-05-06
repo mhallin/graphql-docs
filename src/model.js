@@ -30,7 +30,12 @@ export class Schema {
         });
 
         this.queryTypeId = introspectionResult.__schema.queryType.name;
-        this.mutationTypeId = introspectionResult.__schema.mutationType.name;
+
+        if (introspectionResult.__schema.mutationType) {
+            this.mutationTypeId = introspectionResult.__schema.mutationType.name;
+        } else {
+            this.mutationTypeId = null;
+        }
     }
 
     getQueryType(): ObjectType {
