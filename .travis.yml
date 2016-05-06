@@ -11,13 +11,21 @@ script:
   - npm run lint
 
 deploy:
-  provider: releases
-  api_key:
-    secure: njCIIbvtXMvmALsvPyfEu9eXi+BBcnNIiKtauyQuqN7u8+CETmR678HlLHuYGw8lX4s5uNywdnLTX4iUnQtwMtEDtzUSle7uZJsyBWzQ+8zLLkEEOl56ndq7090wugSR4EYwEyC+1xerF1whTPge5UMKkKDpmv3hHY90wJhbY+uskGk37pew4p48JrBXH+vq66lmv6Lz569h4QQtIojqd5W/sflVGXDikoI5gS5Ku5L82SkvAC8UdshllSqCoxth+s9SFrK+QqAaW8mT3gnxJKN4c3nACtAAKPnO9eCoS18H82CNnz0kfjr/WuysxM6XNUrlwxR4PzhA8rCX1bQLxiusw6bOj/7bpn1GPty/xuTDM9VSLQ0ruaiqkOVMNNZP169fuz7iba2wEx2K/xsTfwKmAw3g1QawOXOwdrrTI+I5JIh/I7L7Ei3NeZusWzm9rES28hEntb4QAuq3v6rOXXL1450xj2RBT5ngEAE/spe3BgkgR5T6VjZWFtARTk8OcJx/YG/1XyTsuB685pnToUYVg0i0zZaCBbXr09N9d7vhiFq5ndjLKUw7UcAQdnLcYyXxuCORRy2Tz893YPkf/+Ib5xbgjTEwWC/S0x4GXJKtCZQTPcu59mstMDMPi3OH0KUwGJ97Xt8DmCU5oECpbSFV3uu5XFKtZcKlgVnBxvg=
-  file:
-    - dist/graphql-docs.js
-    - dist/graphql-docs.min.js
-  skip_cleanup: true
-  on:
-    tags: true
-    branch: master
+  - provider: releases
+    api_key:
+      secure: njCIIbvtXMvmALsvPyfEu9eXi+BBcnNIiKtauyQuqN7u8+CETmR678HlLHuYGw8lX4s5uNywdnLTX4iUnQtwMtEDtzUSle7uZJsyBWzQ+8zLLkEEOl56ndq7090wugSR4EYwEyC+1xerF1whTPge5UMKkKDpmv3hHY90wJhbY+uskGk37pew4p48JrBXH+vq66lmv6Lz569h4QQtIojqd5W/sflVGXDikoI5gS5Ku5L82SkvAC8UdshllSqCoxth+s9SFrK+QqAaW8mT3gnxJKN4c3nACtAAKPnO9eCoS18H82CNnz0kfjr/WuysxM6XNUrlwxR4PzhA8rCX1bQLxiusw6bOj/7bpn1GPty/xuTDM9VSLQ0ruaiqkOVMNNZP169fuz7iba2wEx2K/xsTfwKmAw3g1QawOXOwdrrTI+I5JIh/I7L7Ei3NeZusWzm9rES28hEntb4QAuq3v6rOXXL1450xj2RBT5ngEAE/spe3BgkgR5T6VjZWFtARTk8OcJx/YG/1XyTsuB685pnToUYVg0i0zZaCBbXr09N9d7vhiFq5ndjLKUw7UcAQdnLcYyXxuCORRy2Tz893YPkf/+Ib5xbgjTEwWC/S0x4GXJKtCZQTPcu59mstMDMPi3OH0KUwGJ97Xt8DmCU5oECpbSFV3uu5XFKtZcKlgVnBxvg=
+    file:
+      - dist/graphql-docs.js
+      - dist/graphql-docs.min.js
+    skip_cleanup: true
+    on:
+      tags: true
+      branch: master
+
+  - provider: npm
+    api_key:
+      secure: CYcqZiNOcwUwiNKwpOj23IiEMc80DVoGLJB0gxVbuIE4lkzdZPTYOdHBlCvqyUB9WtR5VL1j8sJ8GZ2jyVqyuf2+jbzIC1DjVPXeYBHKBvj1NIuPdrFHlN9Bm3lAUjZbg5m6eVMF1DZVwGn7J7TDApzbvsD4rtmuivRALrkEUD1ASVPB2xS9DNe9/SF9uOj7IGmzI+8sXF91fm/p/+l+zf1o9gUp0PQ9DAXWdY20SMt2EDx7jeFIPVp2+mmpB7MMnrKPykCbNBIU4vcQH0kpyMhwup9gux7vLkYQgMa6VhWwfhnnxOurcXEFkI08QOArHZZMpdv0WCs5CFpzkuTXDXgE3kRr/1KR6wCbTVyQJcASz2HaLf6C+XhN8A8P9XlCERawIjOecQoGFO/DtqgsPGj053IBn9Bg+th0evxCiaxjmYqTxZd91g0rm5gcF2qFlip+Y/2k4nBS/fcFDHvsj+rUcG+zuBi5vc1/z7r0wBvi86ZjovgRYBJ6mD6B9XcSgw+WQ7Due5KP7pe8pv/3M7e3FLKb0ffZRzvPG+O+TVEsDu5xgz/WjbmUbnRQz5vN7bDgAMe63pelGVguZMFcPmkwfOjEEREq1yk5Wj/Y1tqbX36bnTL5JCmbutGu6iXC0mGDJkEP92Di4NK6Y2PL8cnPTTZQN/SnhvJPfUp36V0=
+    skip_cleanup: true
+    on:
+      tags: true
+      branch: master
