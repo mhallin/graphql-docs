@@ -2,11 +2,8 @@ const path = require('path');
 const cssnext = require('postcss-cssnext');
 const webpack = require('webpack');
 
-const argv = require('yargs').argv;
-
 const plugins = [
     new webpack.DefinePlugin({
-        EXPOSE: !!argv.expose,
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }),
 ];
@@ -30,11 +27,24 @@ if (PRODUCTION) {
 }
 
 module.exports = {
-    entry: './src/index',
+    entry: {
+        'graphql-docs': './src/index',
+    },
 
     output: {
+        libraryTarget: 'umd',
+        library: 'GraphQLDocs',
         path: path.join(__dirname, 'dist'),
         filename: `[name]${PRODUCTION ? '.min' : ''}.js`,
+    },
+
+    externals: {
+        'react': {
+            root: 'React',
+            commonjs2: 'react',
+            commonjs: 'react',
+            amd: 'react',
+        },
     },
 
     module: {

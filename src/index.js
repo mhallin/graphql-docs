@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import { SchemaDocsView } from './components/SchemaDocsView';
 import { Schema } from './model';
@@ -35,19 +34,5 @@ export class GraphQLDocs extends React.Component {
         } else {
             return <div />;
         }
-    }
-}
-
-declare var EXPOSE: boolean;
-
-if (typeof window.EXPOSE !== undefined && EXPOSE) {
-    window.GraphQLDocs = GraphQLDocs;
-
-    if (!window.React) {
-        window.React = React;
-    }
-
-    if (!window.ReactDOM) {
-        window.ReactDOM = ReactDOM;
     }
 }

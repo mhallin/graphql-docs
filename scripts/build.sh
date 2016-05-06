@@ -17,5 +17,5 @@ rm -rf ./dist
 for env in development production; do
     echo "Compiling with environment '$env'"
 
-    NODE_ENV=$env ./node_modules/.bin/webpack --expose
+    NODE_ENV=$env ./node_modules/.bin/webpack
 done

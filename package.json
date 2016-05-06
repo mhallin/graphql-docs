@@ -2,9 +2,20 @@
   "name": "graphql-docs",
   "version": "1.0.0",
   "description": "Dynamic documentation for GraphQL endpoints",
-  "main": "index.js",
+  "main": "dist/graphql-docs.js",
   "author": "Magnus Hallin <mhallin@fastmail.com>",
   "license": "MIT",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "peerDependencies": {
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  },
+  "dependencies": {
+    "marked": "^0.3.5"
+  },
   "devDependencies": {
     "babel-core": "^6.7.7",
     "babel-eslint": "^6.0.4",
@@ -20,15 +31,12 @@
     "eslint-plugin-flowtype": "^2.2.7",
     "eslint-plugin-react": "^5.0.1",
     "expose-loader": "^0.7.1",
-    "marked": "^0.3.5",
+    "flow-bin": "^0.24.2",
     "postcss-cssnext": "^2.5.2",
     "postcss-loader": "^0.8.2",
     "raw-loader": "^0.5.1",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
     "react-hot-loader": "^3.0.0-alpha.13",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.0",
-    "yargs": "^4.7.0"
+    "webpack": "^1.13.0"
   }
 }
