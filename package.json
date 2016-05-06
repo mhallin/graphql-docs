@@ -1,14 +1,21 @@
 {
   "name": "graphql-docs",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Dynamic documentation for GraphQL endpoints",
   "main": "dist/graphql-docs.js",
   "author": "Magnus Hallin <mhallin@fastmail.com>",
   "license": "MIT",
   "files": [
     "dist/",
-    "src/"
+    "src/",
+    "README.rst",
+    "LICENSE"
   ],
+  "scripts": {
+    "test": "echo 'No tests yet :-('",
+    "lint": "./node_modules/.bin/eslint src",
+    "flow": "./node_modules/.bin/flow check"
+  },
   "peerDependencies": {
     "react": "^15.0.1",
     "react-dom": "^15.0.1"
