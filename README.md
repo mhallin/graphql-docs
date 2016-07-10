@@ -17,7 +17,7 @@ GraphQL-Docs tries to work similarly to GraphiQL in most areas. Either use the
 minified files from GitHub:
 
 ```html
-<script src="https://github.com/mhallin/graphql-docs/releases/download/v0.1.3/graphql-docs.min.js"></script>
+<script src="https://github.com/mhallin/graphql-docs/releases/download/v0.1.4/graphql-docs.min.js"></script>
 <!-- Note that you need to include React and ReactDOM *before* this script tag -->
 ```
 
