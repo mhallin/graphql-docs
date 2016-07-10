@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import { Schema, Type, ObjectType, InterfaceType, EnumType, ScalarType } from '../model';
+import { Schema, Type, ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType } from '../model';
 import { getReferencesInSchema } from '../schemaWalker';
 
-import { ObjectDocsView, InterfaceDocsView, EnumDocsView, ScalarDocsView } from './TypeDocsViews';
+import { ObjectDocsView, InterfaceDocsView, EnumDocsView, ScalarDocsView, InputObjectDocsView } from './TypeDocsViews';
 
 import * as StyleSheet from  './SchemaDocsView.css';
 
@@ -37,6 +37,13 @@ export class SchemaDocsView extends React.Component {
             if (t instanceof EnumType) {
                 components.push(
                     <EnumDocsView
+                        key={t.name}
+                        type={t}
+                    />);
+            }
+            if (t instanceof InputObjectType) {
+                components.push(
+                    <InputObjectDocsView
                         key={t.name}
                         type={t}
                     />);

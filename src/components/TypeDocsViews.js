@@ -2,11 +2,12 @@
 
 import React from 'react';
 
-import { ObjectType, InterfaceType, EnumType, ScalarType, Field, TypeRef, EnumValue } from '../model';
+import { ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
 
 import { DescriptionView } from './DescriptionView';
 import { FieldView } from './FieldView';
 import { TypeRefView } from './TypeRefView';
+import { FieldArgumentsTableView } from './FieldArgumentsTableView';
 
 import * as StyleSheet from './TypeDocsViews.css';
 
@@ -79,6 +80,26 @@ export class ScalarDocsView extends React.Component {
             <div className={StyleSheet.type}>
                 {renderTitle(type.name)}
                 {renderDescription(type.description)}
+            </div>
+        );
+    }
+}
+
+export class InputObjectDocsView extends React.Component {
+    props: {
+        type: InputObjectType,
+    };
+
+    render() {
+        const type = this.props.type;
+
+        return (
+            <div className={StyleSheet.type}>
+                {renderTitle(type.name)}
+                {renderDescription(type.description)}
+                <FieldArgumentsTableView
+                    args={type.inputFields}
+                />
             </div>
         );
     }

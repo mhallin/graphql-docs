@@ -38,6 +38,21 @@ const SampleQueryType = new graphql.GraphQLObjectType({
     }),
 });
 
+const FooInput = new graphql.GraphQLInputObjectType({
+    name: 'FooInput',
+    description: 'Representation of a `Foo` object when passing it as an argument to a field',
+    fields: {
+        x: {
+            type: new graphql.GraphQLNonNull(graphql.GraphQLFloat),
+            description: 'The X coordinate',
+        },
+        y: {
+            type: new graphql.GraphQLNonNull(graphql.GraphQLFloat),
+            description: 'The Y coordinate',
+        },
+    },
+});
+
 const SampleMutationType = new graphql.GraphQLObjectType({
     name: 'SampleMutation',
     fields: () => ({
@@ -46,7 +61,7 @@ const SampleMutationType = new graphql.GraphQLObjectType({
             description: 'Set the `foo` property',
             args: {
                 value: {
-                    type: graphql.GraphQLString,
+                    type: FooInput,
                     description: 'The `foo` property itself. If this is null, all foos are removed.',
                 },
             },

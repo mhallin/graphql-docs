@@ -5,6 +5,7 @@ export const TYPE_KINDS = [
     'INTERFACE',
     'OBJECT',
     'ENUM',
+    'INPUT_OBJECT',
 ];
 
 export type TypeId = string;
@@ -67,7 +68,7 @@ export class Type {
     name: TypeId;
     description: ?string;
 
-    static fromIntrospectionType(introspectionType: any) {
+    static fromIntrospectionType(introspectionType: any): Type {
         if (introspectionType.kind === 'OBJECT') {
             return new ObjectType(introspectionType);
         } else if (introspectionType.kind === 'SCALAR') {
@@ -76,6 +77,8 @@ export class Type {
             return new InterfaceType(introspectionType);
         } else if (introspectionType.kind === 'ENUM') {
             return new EnumType(introspectionType);
+        } else if (introspectionType.kind === 'INPUT_OBJECT') {
+            return new InputObjectType(introspectionType);
         } else {
             throw new Error('Unsupported type kind: ' + introspectionType.kind);
         }
@@ -156,6 +159,21 @@ export class EnumType extends Type {
         super(introspectionType);
 
         this.enumValues = introspectionType.enumValues.map(v => new EnumValue(v));
+    }
+}
+
+export class InputObjectType extends Type {
+    inputFields: Array<InputValue>;
+
+    constructor(introspectionType: any) {
+        pre: {
+            introspectionType.kind === 'INPUT_OBJECT';
+            Array.isArray(introspectionType.inputFields);
+        }
+
+        super(introspectionType);
+
+        this.inputFields = introspectionType.inputFields.map(f => new InputValue(f));
     }
 }
 
