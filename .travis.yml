@@ -5,7 +5,6 @@ node_js: stable
 script:
   - npm run flow
   - npm run lint
-  - npm pack
 
 deploy:
   - provider: releases

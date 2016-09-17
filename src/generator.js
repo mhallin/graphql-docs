@@ -1,3 +1,4 @@
+// @flow
 /* eslint-env node */
 /* eslint no-console: 0 */
 
@@ -21,7 +22,7 @@ if (input === '-') {
     process.stdin.on('readable', () => {
         const chunk = process.stdin.read();
         if (chunk) {
-            receivedData += chunk;
+            receivedData += chunk.toString();
         }
     });
 

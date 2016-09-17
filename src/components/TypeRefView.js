@@ -40,6 +40,6 @@ export class TypeRefView extends React.Component {
             );
         }
 
-        throw new Error(`Unknown type ref: ${ref}`);
+        throw new Error(`Unknown type ref: ${ref.toString()}`);
     }
 }

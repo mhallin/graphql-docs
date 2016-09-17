@@ -9,7 +9,7 @@ type Bag = {[tid: TypeId]: number};
 
 export function getReferencesInSchema(schema: Schema): [TypeId] {
     const visitQueue: Array<TypeId> = [];
-    const visited = [];
+    const visited: Array<TypeId> = [];
 
     visitQueue.push(schema.getQueryType().name);
 
@@ -73,7 +73,7 @@ function addTypeRefToBag(typeRef: TypeRef, refs: Bag) {
     } else if (typeRef instanceof NamedTypeRef) {
         refs[typeRef.typeName] = (refs[typeRef.typeName] || 0) + 1;
     } else {
-        throw new Error(`Unknown type ref: ${typeRef}`);
+        throw new Error(`Unknown type ref: ${typeRef.toString()}`);
     }
 }
 
