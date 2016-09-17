@@ -13,11 +13,12 @@ schemas. It aims to provide a better overview of a schema than
 
 ## Installation and usage
 
-GraphQL-Docs tries to work similarly to GraphiQL in most areas. Either use the
-minified files from GitHub:
+GraphQL-Docs supports both a dynamic mode and a static mode. In dynamic mode,
+GraphQL-Docs tries to work similarly to GraphiQL. Either use the minified files
+from GitHub:
 
 ```html
-<script src="https://github.com/mhallin/graphql-docs/releases/download/v0.1.4/graphql-docs.min.js"></script>
+<script src="https://github.com/mhallin/graphql-docs/releases/download/v0.2.0/graphql-docs.min.js"></script>
 <!-- Note that you need to include React and ReactDOM *before* this script tag -->
 ```
 
@@ -52,6 +53,17 @@ ReactDOM.render(<GraphQLDocs.GraphQLDocs fetcher={fetcher} />, document.body);
 All CSS is included in the Javascript code, so no other dependencies are
 required. You can find examples of both the first and second paradigms in the
 examples folder.
+
+## Static documentation generation
+
+You can also generate a static documentation file based on a schema file or
+GraphQL endpoint:
+
+```sh
+npm install -g graphql-docs
+
+graphql-docs-gen http://GRAPHQL_ENDPOINT documentation.html
+```
 
 ## Features
 
