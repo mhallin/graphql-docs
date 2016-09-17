@@ -1,3 +1,6 @@
+/* eslint-env node */
+/* eslint no-console: 0 */
+
 const args = require('yargs')
     .usage('$0 <input> [output]')
     .demand(1, 2, 'You must provide at least an input filename or URL')
