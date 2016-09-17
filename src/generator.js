@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @flow
 /* eslint-env node */
 /* eslint no-console: 0 */
