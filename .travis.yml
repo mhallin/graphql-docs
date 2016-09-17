@@ -7,8 +7,8 @@ before_install:
 
 script:
   - npm run flow
-  - ./scripts/build.sh
   - npm run lint
+  - npm pack
 
 deploy:
   - provider: releases

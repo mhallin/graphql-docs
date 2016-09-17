@@ -18,6 +18,7 @@
     "test": "echo 'No tests yet :-('",
     "lint": "./node_modules/.bin/eslint src",
     "flow": "./node_modules/.bin/flow check",
+    "prepublish": "./scripts/build.sh"
   },
   "keywords": ["graphql", "react", "docs", "documentation"],
   "homepage": "https://github.com/mhallin/graphql-docs",
