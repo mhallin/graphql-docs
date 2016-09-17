@@ -7,14 +7,17 @@
   "license": "SEE LICENSE IN LICENSE",
   "files": [
     "dist/",
-    "src/",
+    "lib/",
     "README.rst",
     "LICENSE"
   ],
+  "bin": {
+    "graphql-docs-gen": "lib/generator.js"
+  },
   "scripts": {
     "test": "echo 'No tests yet :-('",
     "lint": "./node_modules/.bin/eslint src",
-    "flow": "./node_modules/.bin/flow check"
+    "flow": "./node_modules/.bin/flow check",
   },
   "keywords": ["graphql", "react", "docs", "documentation"],
   "homepage": "https://github.com/mhallin/graphql-docs",
@@ -33,10 +36,13 @@
     "react-dom": "^15.0.1"
   },
   "dependencies": {
-    "marked": "^0.3.5"
+    "marked": "^0.3.5",
+    "request": "^2.74.0",
+    "yargs": "^5.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.7.7",
+    "babel-cli": "^6.7.7",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-contracts": "^1.1.1",
