@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
+import { ObjectType, InterfaceType, UnionType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
 
 import { DescriptionView } from './DescriptionView';
 import { FieldView } from './FieldView';
@@ -29,6 +29,23 @@ export class ObjectDocsView extends React.Component {
                 {renderDescription(type.description)}
                 {renderInterfaces(type.interfaces)}
                 {renderFields(type.fields)}
+            </div>
+        );
+    }
+}
+
+export class UnionDocsView extends React.Component {
+    props: {
+        type: UnionType,
+    };
+
+    render() {
+        const type = this.props.type;
+        return (
+            <div className={StyleSheet.type}>
+                {renderTitle(type.name)}
+                {renderDescription(type.description)}
+                {renderPossibleTypes(type.possibleTypes)}
             </div>
         );
     }
@@ -151,6 +168,27 @@ function renderInterfaces(interfaces: Array<TypeRef>) {
 
             <ul className={StyleSheet.interfacesList}>
                 {interfaces.map((r, i) =>
+                    <li key={i}>
+                        <TypeRefView key={i} typeRef={r} />
+                    </li>)}
+            </ul>
+        </div>
+    );
+}
+
+function renderPossibleTypes(possibleTypes: Array<TypeRef>) {
+    if (!possibleTypes.length) {
+        return null;
+    }
+
+    return (
+        <div>
+            <div className={StyleSheet.subHeading}>
+                Possible Types
+            </div>
+
+            <ul className={StyleSheet.interfacesList}>
+                {possibleTypes.map((r, i) =>
                     <li key={i}>
                         <TypeRefView key={i} typeRef={r} />
                     </li>)}

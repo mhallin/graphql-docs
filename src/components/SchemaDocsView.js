@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import { Schema, Type, ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType } from '../model';
+import { Schema, Type, ObjectType, InterfaceType, UnionType, EnumType, ScalarType, InputObjectType } from '../model';
 import { getReferencesInSchema } from '../schemaWalker';
 
-import { ObjectDocsView, InterfaceDocsView, EnumDocsView, ScalarDocsView, InputObjectDocsView } from './TypeDocsViews';
+import { ObjectDocsView, InterfaceDocsView, UnionDocsView, EnumDocsView, ScalarDocsView, InputObjectDocsView } from './TypeDocsViews';
 
 import * as StyleSheet from  './SchemaDocsView.css';
 
@@ -25,6 +25,13 @@ export class SchemaDocsView extends React.Component {
                         key={t.name}
                         type={t}
                         titleOverride={this.titleOverrideFor(t)}
+                    />);
+            }
+            if (t instanceof UnionType) {
+                components.push(
+                    <UnionDocsView
+                        key={t.name}
+                        type={t}
                     />);
             }
             if (t instanceof InterfaceType) {
