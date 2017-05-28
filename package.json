@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "marked": "^0.3.5",
+	"react-typeahead": "^2.0.0-alpha.5",
     "request": "^2.74.0",
     "yargs": "^5.0.0"
   },
