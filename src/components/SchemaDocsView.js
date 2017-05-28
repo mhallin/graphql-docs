@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import {Typeahead} from 'react-typeahead';
 
 import { Schema, Type, ObjectType, InterfaceType, UnionType, EnumType, ScalarType, InputObjectType } from '../model';
 import { getReferencesInSchema } from '../schemaWalker';
@@ -12,21 +13,31 @@ import SideNavSectionView from './SideNavSectionView';
 import * as StyleSheet from  './SchemaDocsView.css';
 
 export class SchemaDocsView extends React.Component {
+    constructor(props: any) {
+        super(props);
+        (this: any).handleSelect = this.handleSelect.bind(this);
+    }
+
     props: {
-        schema: Schema,
+        schema: Schema
     };
+
+    handleSelect(name: string) {
+        location.hash = `#${name}`;
+    }
 
     render() {
         const types = getReferencesInSchema(this.props.schema).map(tn => this.props.schema.types[tn]);
         const sections = {
             schema: {name: 'Schema', items: []},
-            objects: {name: 'Objects', items: []},
+            objects: {name: 'Object Types', items: []},
             inputs: {name: 'Input Types', items: []},
             unions: {name: 'Unions', items: []},
             interfaces: {name: 'Interfaces', items: []},
             enums: {name: 'Enums', items: []},
             scalars: {name: 'Scalars', items: []},
         };
+        const options = [];
 
         types.forEach((t: Type) => {
             if (t instanceof ObjectType) {
@@ -39,11 +50,14 @@ export class SchemaDocsView extends React.Component {
                 if (t === this.props.schema.getQueryType() ||
                   t === this.props.schema.getMutationType()) {
                     sections.schema.items.push({name: t.name, component: component});
+                    options.push(t.name);
                 } else {
                     sections.objects.items.push({name: t.name, component: component});
+                    options.push(t.name);
                 }
             }
             if (t instanceof UnionType) {
+                options.push(t.name);
                 sections.unions.items.push({name: t.name, component:
                     (<UnionDocsView
                         key={t.name}
@@ -51,6 +65,7 @@ export class SchemaDocsView extends React.Component {
                     />)});
             }
             if (t instanceof InterfaceType) {
+                options.push(t.name);
                 sections.interfaces.items.push({name: t.name, component:
                     (<InterfaceDocsView
                         key={t.name}
@@ -58,6 +73,7 @@ export class SchemaDocsView extends React.Component {
                     />)});
             }
             if (t instanceof EnumType) {
+                options.push(t.name);
                 sections.enums.items.push({name: t.name, component:
                     (<EnumDocsView
                         key={t.name}
@@ -65,15 +81,15 @@ export class SchemaDocsView extends React.Component {
                     />)});
             }
             if (t instanceof InputObjectType) {
+                options.push(t.name);
                 sections.inputs.items.push({name: t.name, component:
                     (<InputObjectDocsView
                         key={t.name}
                         type={t}
                     />)});
             }
-        });
-        types.forEach((t: Type) => {
             if (t instanceof ScalarType) {
+                options.push(t.name);
                 sections.scalars.items.push({name: t.name, component:
                     (<ScalarDocsView
                         key={t.name}
@@ -95,9 +111,24 @@ export class SchemaDocsView extends React.Component {
             });
         });
 
+        const customClasses = {
+            input: StyleSheet.selectInput,
+            results: StyleSheet.selectList,
+            listItem: StyleSheet.selectItem,
+            hover: StyleSheet.selectHover,
+        };
+
         return (
             <div className={StyleSheet.wrapper}>
                 <div className={StyleSheet.sidenav}>
+                    <Typeahead
+                        options={options}
+                        maxVisible={6}
+                        placeholder="Search types"
+                        customClasses={customClasses}
+                        onOptionSelected={this.handleSelect}
+                    />
+                    <br />
                     {Object.keys(sections).map( (key) => {
                         const section = sections[key];
                         return (section.items.length > 0) ? (

@@ -1,3 +1,5 @@
 // @flow
 
-declare export var section: string;
+declare export var sidenavSection: string;
+declare export var sectionLink: string;
+declare export var typeLink: string;

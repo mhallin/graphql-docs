@@ -20,7 +20,12 @@
     "flow": "./node_modules/.bin/flow check",
     "prepublish": "./scripts/build.sh"
   },
-  "keywords": ["graphql", "react", "docs", "documentation"],
+  "keywords": [
+    "graphql",
+    "react",
+    "docs",
+    "documentation"
+  ],
   "homepage": "https://github.com/mhallin/graphql-docs",
   "repository": {
     "type": "git",
@@ -32,12 +37,9 @@
   "engines": {
     "node": ">= 4.4.0"
   },
-  "peerDependencies": {
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1"
-  },
   "dependencies": {
     "marked": "^0.3.5",
+    "react-typeahead": "^2.0.0-alpha.5",
     "request": "^2.74.0",
     "yargs": "^5.0.0"
   },
