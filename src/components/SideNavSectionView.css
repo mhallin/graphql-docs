@@ -1,0 +1,30 @@
+@import "./_normalize.css";
+
+.sidenavSection {
+    width: 100%;
+}
+
+.sectionLink,
+.typeLink {
+    width: 100%;
+}
+
+.sectionLink > a,
+.typeLink > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 10px;
+    text-decoration: none;
+    color: darkgray;
+}
+
+.sectionLink > a {
+    text-transform: uppercase;
+    color: #222222;
+}
+
+.typeLink:hover,
+.sectionLink:hover {
+    background: lightgray;
+}
