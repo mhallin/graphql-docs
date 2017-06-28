@@ -78,6 +78,7 @@ function writeToOutput(result) {
         <html>
             <head>
                 <title>GraphQL Docs</title>
+                <meta charset="utf-8">
             </head>
 
             <body>
