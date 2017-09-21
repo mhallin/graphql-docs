@@ -26,6 +26,12 @@
     composes: argumentName from "./_base.css";
     composes: argumentCell from "./_base.css";
 }
+.enumNameDeprecated {
+    composes: argumentName from "./_base.css";
+    composes: argumentCell from "./_base.css";
+    color: crimson;
+    text-decoration: line-through;
+}
 
 .enumRow {
     composes: argumentRow from "./_base.css";

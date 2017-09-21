@@ -5,6 +5,7 @@ import React from 'react';
 import { ObjectType, InterfaceType, UnionType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
 
 import { DescriptionView } from './DescriptionView';
+import { DeprecatedView } from './DeprecatedView';
 import { FieldView } from './FieldView';
 import { TypeRefView } from './TypeRefView';
 import { FieldArgumentsTableView } from './FieldArgumentsTableView';
@@ -236,13 +237,16 @@ function renderEnumValues(enumValues: Array<EnumValue>) {
                             className={StyleSheet.enumRow}
                         >
                             <td
-                                className={StyleSheet.enumName}
+                                className={v.isDeprecated ? StyleSheet.enumNameDeprecated : StyleSheet.enumName}
                             >
                                 {v.name}
                             </td>
                             <td>
-                                {v.description &&
-                                    <DescriptionView description={v.description} />}
+                              {
+                                  (v.isDeprecated && <DeprecatedView reason={v.deprecationReason} />)
+                                  ||
+                                  (v.description && <DescriptionView description={v.description} />)
+                              }
                             </td>
                         </tr>
                     )}

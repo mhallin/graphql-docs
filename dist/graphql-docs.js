@@ -71,7 +71,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _model = __webpack_require__(13);
 	
-	var _introspectionQuery = __webpack_require__(46);
+	var _introspectionQuery = __webpack_require__(49);
 	
 	var _introspectionQuery2 = _interopRequireDefault(_introspectionQuery);
 	
@@ -100,6 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var promise = this.props.fetcher(_introspectionQuery2.default);
 	
 	            promise.then(function (json) {
+	                console.log(new _model.Schema(json.data));
 	                _this2.setState({
 	                    schema: new _model.Schema(json.data)
 	                });
@@ -150,15 +151,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _TypeDocsViews = __webpack_require__(15);
 	
-	var _SectionView = __webpack_require__(37);
+	var _SectionView = __webpack_require__(40);
 	
 	var _SectionView2 = _interopRequireDefault(_SectionView);
 	
-	var _SideNavSectionView = __webpack_require__(41);
+	var _SideNavSectionView = __webpack_require__(44);
 	
 	var _SideNavSectionView2 = _interopRequireDefault(_SideNavSectionView);
 	
-	var _SchemaDocsView = __webpack_require__(44);
+	var _SchemaDocsView = __webpack_require__(47);
 	
 	var StyleSheet = _interopRequireWildcard(_SchemaDocsView);
 	
@@ -1643,13 +1644,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            throw new Error('Function  precondition failed: introspectionType.kind === \'UNION\'');
 	        }
 	
-	        if (!Array.isArray(introspectionType.possibleTypes)) {
-	            throw new Error('Function  precondition failed: Array.isArray(introspectionType.possibleTypes)');
+	        if (!(!introspectionType.possibleTypesArray || Array.isArray(introspectionType.possibleTypes))) {
+	            throw new Error('Function  precondition failed: !introspectionType.possibleTypesArray || Array.isArray(introspectionType.possibleTypes)');
 	        }
 	
 	        var _this3 = _possibleConstructorReturn(this, (UnionType.__proto__ || Object.getPrototypeOf(UnionType)).call(this, introspectionType));
 	
-	        _this3.possibleTypes = introspectionType.possibleTypes.map(function (r) {
+	        _this3.possibleTypes = (introspectionType.possibleTypes || []).map(function (r) {
 	            return TypeRef.fromIntrospectionRef(r);
 	        });
 	        return _this3;
@@ -1688,8 +1689,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            throw new Error('Function  precondition failed: Array.isArray(introspectionType.fields)');
 	        }
 	
-	        if (!Array.isArray(introspectionType.possibleTypes)) {
-	            throw new Error('Function  precondition failed: Array.isArray(introspectionType.possibleTypes)');
+	        if (!(!introspectionType.possibleTypes || Array.isArray(introspectionType.possibleTypes))) {
+	            throw new Error('Function  precondition failed: !introspectionType.possibleTypes || Array.isArray(introspectionType.possibleTypes)');
 	        }
 	
 	        var _this5 = _possibleConstructorReturn(this, (InterfaceType.__proto__ || Object.getPrototypeOf(InterfaceType)).call(this, introspectionType));
@@ -1697,7 +1698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this5.fields = introspectionType.fields.map(function (f) {
 	            return new Field(f);
 	        });
-	        _this5.possibleTypes = introspectionType.possibleTypes.map(function (r) {
+	        _this5.possibleTypes = (introspectionType.possibleTypes || []).map(function (r) {
 	            return TypeRef.fromIntrospectionRef(r);
 	        });
 	        return _this5;
@@ -1775,12 +1776,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw new Error('Function  precondition failed: Array.isArray(introspectionField.args)');
 	    }
 	
+	    if (!(!introspectionField.isDeprecated || typeof introspectionField.deprecationReason === 'string')) {
+	        throw new Error('Function  precondition failed: !introspectionField.isDeprecated || typeof introspectionField.deprecationReason === \'string\'');
+	    }
+	
+	    if (!(introspectionField.isDeprecated || introspectionField.deprecationReason === null)) {
+	        throw new Error('Function  precondition failed: introspectionField.isDeprecated || introspectionField.deprecationReason === null');
+	    }
+	
 	    this.name = introspectionField.name;
 	    this.description = introspectionField.description;
 	    this.args = introspectionField.args.map(function (a) {
 	        return new InputValue(a);
 	    });
 	    this.type = TypeRef.fromIntrospectionRef(introspectionField.type);
+	    this.isDeprecated = introspectionField.isDeprecated;
+	    this.deprecationReason = introspectionField.deprecationReason;
 	};
 	
 	var InputValue = exports.InputValue = function InputValue(introspectionValue) {
@@ -2049,13 +2060,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _DescriptionView = __webpack_require__(16);
 	
-	var _FieldView = __webpack_require__(22);
+	var _DeprecatedView = __webpack_require__(22);
 	
-	var _TypeRefView = __webpack_require__(24);
+	var _FieldView = __webpack_require__(25);
 	
-	var _FieldArgumentsTableView = __webpack_require__(30);
+	var _TypeRefView = __webpack_require__(27);
 	
-	var _TypeDocsViews = __webpack_require__(35);
+	var _FieldArgumentsTableView = __webpack_require__(33);
+	
+	var _TypeDocsViews = __webpack_require__(38);
 	
 	var StyleSheet = _interopRequireWildcard(_TypeDocsViews);
 	
@@ -2381,14 +2394,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        _react2.default.createElement(
 	                            'td',
 	                            {
-	                                className: StyleSheet.enumName
+	                                className: v.isDeprecated ? StyleSheet.enumNameDeprecated : StyleSheet.enumName
 	                            },
 	                            v.name
 	                        ),
 	                        _react2.default.createElement(
 	                            'td',
 	                            null,
-	                            v.description && _react2.default.createElement(_DescriptionView.DescriptionView, { description: v.description })
+	                            v.isDeprecated && _react2.default.createElement(_DeprecatedView.DeprecatedView, { reason: v.deprecationReason }) || v.description && _react2.default.createElement(_DescriptionView.DescriptionView, { description: v.description })
 	                        )
 	                    );
 	                })
@@ -3788,11 +3801,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "._1S63EXzJ2LWrq2TSLX8cAu :first-child {\n    margin-top: 0;\n}\n\n._1S63EXzJ2LWrq2TSLX8cAu :last-child {\n    margin-bottom: 0;\n}\n\n._1S63EXzJ2LWrq2TSLX8cAu h1 {\n    font-size: 1.3em;\n}\n\n._1S63EXzJ2LWrq2TSLX8cAu h2 {\n    font-size: 1.1em;\n}\n\n._1S63EXzJ2LWrq2TSLX8cAu h3 {\n    font-size: 1em;\n    -webkit-font-feature-settings: \"c2sc\";\n            font-feature-settings: \"c2sc\";\n    font-variant: small-caps;\n}\n\n._1S63EXzJ2LWrq2TSLX8cAu blockquote {\n    border-left: 8px solid #e8e8e8;\n    margin-top: -0.3em;\n    padding-top: 0.3em;\n    margin-left: 20px;\n    padding-left: 12px;\n    margin-bottom: -0.5em;\n    padding-bottom: 0.5em;\n}\n", ""]);
+	exports.push([module.id, "._2lrrBFpl54pdapGsWmQMh2 :first-child {\r\n    margin-top: 0;\r\n}\r\n\r\n._2lrrBFpl54pdapGsWmQMh2 :last-child {\r\n    margin-bottom: 0;\r\n}\r\n\r\n._2lrrBFpl54pdapGsWmQMh2 h1 {\r\n    font-size: 1.3em;\r\n}\r\n\r\n._2lrrBFpl54pdapGsWmQMh2 h2 {\r\n    font-size: 1.1em;\r\n}\r\n\r\n._2lrrBFpl54pdapGsWmQMh2 h3 {\r\n    font-size: 1em;\r\n    -webkit-font-feature-settings: \"c2sc\";\r\n            font-feature-settings: \"c2sc\";\r\n    font-variant: small-caps;\r\n}\r\n\r\n._2lrrBFpl54pdapGsWmQMh2 blockquote {\r\n    border-left: 8px solid #e8e8e8;\r\n    margin-top: -0.3em;\r\n    padding-top: 0.3em;\r\n    margin-left: 20px;\r\n    padding-left: 12px;\r\n    margin-bottom: -0.5em;\r\n    padding-bottom: 0.5em;\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"container": "_1S63EXzJ2LWrq2TSLX8cAu"
+		"container": "_2lrrBFpl54pdapGsWmQMh2"
 	};
 
 /***/ }),
@@ -4112,6 +4125,111 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.DeprecatedView = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _marked = __webpack_require__(17);
+	
+	var _marked2 = _interopRequireDefault(_marked);
+	
+	var _DeprecatedView = __webpack_require__(23);
+	
+	var StyleSheet = _interopRequireWildcard(_DeprecatedView);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DeprecatedView = exports.DeprecatedView = function (_React$Component) {
+	    _inherits(DeprecatedView, _React$Component);
+	
+	    function DeprecatedView() {
+	        _classCallCheck(this, DeprecatedView);
+	
+	        return _possibleConstructorReturn(this, (DeprecatedView.__proto__ || Object.getPrototypeOf(DeprecatedView)).apply(this, arguments));
+	    }
+	
+	    _createClass(DeprecatedView, [{
+	        key: 'render',
+	        value: function render() {
+	            var html = (0, _marked2.default)('[DEPRECATED] ' + this.props.reason);
+	
+	            return _react2.default.createElement('div', {
+	                className: [StyleSheet.container, this.props.className].join(' '),
+	                dangerouslySetInnerHTML: { __html: html }
+	            });
+	        }
+	    }]);
+	
+	    return DeprecatedView;
+	}(_react2.default.Component);
+	
+	DeprecatedView.defaultProps = {
+	    className: ''
+	};
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(24);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(21)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../node_modules/css-loader/index.js?modules&importLoaders=1!../../node_modules/postcss-loader/index.js!./DeprecatedView.css", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js?modules&importLoaders=1!../../node_modules/postcss-loader/index.js!./DeprecatedView.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(20)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "._182r0Epd2ULHHfV8o3Gb5B :first-child {\r\n    margin-top: 0;\r\n}\r\n\r\n._182r0Epd2ULHHfV8o3Gb5B :last-child {\r\n    margin-bottom: 0;\r\n}\r\n\r\n._182r0Epd2ULHHfV8o3Gb5B h1 {\r\n    font-size: 1.3em;\r\n}\r\n\r\n._182r0Epd2ULHHfV8o3Gb5B h2 {\r\n    font-size: 1.1em;\r\n}\r\n\r\n._182r0Epd2ULHHfV8o3Gb5B h3 {\r\n    font-size: 1em;\r\n    -webkit-font-feature-settings: \"c2sc\";\r\n            font-feature-settings: \"c2sc\";\r\n    font-variant: small-caps;\r\n}\r\n\r\n._182r0Epd2ULHHfV8o3Gb5B blockquote {\r\n    border-left: 8px solid #e8e8e8;\r\n    margin-top: -0.3em;\r\n    padding-top: 0.3em;\r\n    margin-left: 20px;\r\n    padding-left: 12px;\r\n    margin-bottom: -0.5em;\r\n    padding-bottom: 0.5em;\r\n}\r\n", ""]);
+	
+	// exports
+	exports.locals = {
+		"container": "_182r0Epd2ULHHfV8o3Gb5B"
+	};
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.FieldView = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -4124,11 +4242,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _DescriptionView = __webpack_require__(16);
 	
-	var _FieldSyntaxView = __webpack_require__(23);
+	var _DeprecatedView = __webpack_require__(22);
 	
-	var _FieldArgumentsTableView = __webpack_require__(30);
+	var _FieldSyntaxView = __webpack_require__(26);
 	
-	var _FieldView = __webpack_require__(33);
+	var _FieldArgumentsTableView = __webpack_require__(33);
+	
+	var _FieldView = __webpack_require__(36);
 	
 	var StyleSheet = _interopRequireWildcard(_FieldView);
 	
@@ -4164,6 +4284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                },
 	                _react2.default.createElement(_FieldSyntaxView.FieldSyntaxView, { field: field }),
 	                this.renderDescription(field.description),
+	                this.renderDeprecated(field.isDeprecated, field.deprecationReason),
 	                _react2.default.createElement(_FieldArgumentsTableView.FieldArgumentsTableView, { args: field.args })
 	            );
 	        }
@@ -4179,13 +4300,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	                description: description
 	            });
 	        }
+	    }, {
+	        key: 'renderDeprecated',
+	        value: function renderDeprecated(isDeprecated, reason) {
+	            if (!isDeprecated) {
+	                return null;
+	            }
+	
+	            return _react2.default.createElement(_DeprecatedView.DeprecatedView, {
+	                className: StyleSheet.deprecated,
+	                reason: reason
+	            });
+	        }
 	    }]);
 	
 	    return FieldView;
 	}(_react2.default.Component);
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4203,9 +4336,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _model = __webpack_require__(13);
 	
-	var _TypeRefView = __webpack_require__(24);
+	var _TypeRefView = __webpack_require__(27);
 	
-	var _FieldSyntaxView = __webpack_require__(28);
+	var _FieldSyntaxView = __webpack_require__(31);
 	
 	var StyleSheet = _interopRequireWildcard(_FieldSyntaxView);
 	
@@ -4306,7 +4439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react2.default.Component);
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4324,7 +4457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _model = __webpack_require__(13);
 	
-	var _TypeRefView = __webpack_require__(25);
+	var _TypeRefView = __webpack_require__(28);
 	
 	var StyleSheet = _interopRequireWildcard(_TypeRefView);
 	
@@ -4386,13 +4519,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react2.default.Component);
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(26);
+	var content = __webpack_require__(29);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4412,23 +4545,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(27), undefined);
+	exports.i(__webpack_require__(30), undefined);
 	
 	// module
-	exports.push([module.id, "._3Ue4q58Ya6q2FCTVkZKllk {\n}\n", ""]);
+	exports.push([module.id, "._3YrhGPCesSru7PrfrJpq0L {\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"typeRef": "_3Ue4q58Ya6q2FCTVkZKllk " + __webpack_require__(27).locals["typeLink"] + ""
+		"typeRef": "_3YrhGPCesSru7PrfrJpq0L " + __webpack_require__(30).locals["typeLink"] + ""
 	};
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
@@ -4436,27 +4569,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "html::-webkit-scrollbar\n{\n    width: 12px;\n    background-color: #f1f1f1;\n}\n\nhtml::-webkit-scrollbar-thumb\n{\n    border-radius: 10px;\n    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\n    background-color: #d0d0d0;\n}\n\n._3_QndMLrl0DS7txXsKk5aM {\n    color: #5b2699;\n}\n\n._1QSb_Lywz03jNMCELm-GrU {\n    padding-right: 16px;\n    padding-right: 1rem;\n    white-space: nowrap;\n}\n\n._3a5669pwdwJabgmbtJHumc {\n    line-height: 1.3;\n}\n\n._3Xlbyq0Qo-JOAJLLx2z9-l {\n    color: #64381f;\n}\n\n.NgU4gHjdynLJU2YSbF4ic {\n    color: #836c28;\n}\n\n._15sahXcXCjIULC63jwKqZE {\n    color: #007400;\n    text-decoration: none;\n}\n\n._1ssUqN390ygEtVlxHSnU0e,\n._1ssUqN390ygEtVlxHSnU0e:active,\n._1ssUqN390ygEtVlxHSnU0e:hover,\n._1ssUqN390ygEtVlxHSnU0e:visited {\n    color: #007400;\n    text-decoration: none;\n}\n", ""]);
+	exports.push([module.id, "html::-webkit-scrollbar\r\n{\r\n    width: 12px;\r\n    background-color: #f1f1f1;\r\n}\r\n\r\nhtml::-webkit-scrollbar-thumb\r\n{\r\n    border-radius: 10px;\r\n    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\r\n    background-color: #d0d0d0;\r\n}\r\n\r\n.AWISa_AQ6Kv8d4vGk-y2 {\r\n    color: #5b2699;\r\n}\r\n\r\n._34YIXsWVsrcl3suK_TFy54 {\r\n    padding-right: 16px;\r\n    padding-right: 1rem;\r\n    white-space: nowrap;\r\n}\r\n\r\n._3bCFlcdjknktWs9Kv28mg- {\r\n    line-height: 1.3;\r\n}\r\n\r\n._2jil82oRFO9p_nTETzt3ft {\r\n    color: #64381f;\r\n}\r\n\r\n.hoeEPQEwcTo5mb6e5wqWF {\r\n    color: #836c28;\r\n}\r\n\r\n._3b2Ma2rq3LDEfsbgiLEnAI {\r\n    color: #007400;\r\n    text-decoration: none;\r\n}\r\n\r\n.bxpnHf2SRwpvQBukNAp6N,\r\n.bxpnHf2SRwpvQBukNAp6N:active,\r\n.bxpnHf2SRwpvQBukNAp6N:hover,\r\n.bxpnHf2SRwpvQBukNAp6N:visited {\r\n    color: #007400;\r\n    text-decoration: none;\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"argumentName": "_3_QndMLrl0DS7txXsKk5aM",
-		"argumentCell": "_1QSb_Lywz03jNMCELm-GrU",
-		"argumentRow": "_3a5669pwdwJabgmbtJHumc",
-		"fieldName": "_3Xlbyq0Qo-JOAJLLx2z9-l",
-		"defaultValue": "NgU4gHjdynLJU2YSbF4ic",
-		"typeName": "_15sahXcXCjIULC63jwKqZE",
-		"typeLink": "_1ssUqN390ygEtVlxHSnU0e"
+		"argumentName": "AWISa_AQ6Kv8d4vGk-y2",
+		"argumentCell": "_34YIXsWVsrcl3suK_TFy54",
+		"argumentRow": "_3bCFlcdjknktWs9Kv28mg-",
+		"fieldName": "_2jil82oRFO9p_nTETzt3ft",
+		"defaultValue": "hoeEPQEwcTo5mb6e5wqWF",
+		"typeName": "_3b2Ma2rq3LDEfsbgiLEnAI",
+		"typeLink": "bxpnHf2SRwpvQBukNAp6N"
 	};
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(29);
+	var content = __webpack_require__(32);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4476,26 +4609,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(27), undefined);
+	exports.i(__webpack_require__(30), undefined);
 	
 	// module
-	exports.push([module.id, "._3Q9rTqv61jz1TMbQgSC21Y {\n    margin-bottom: 3.2px;\n    margin-bottom: 0.2rem;\n}\n\n.pfwgw1KVkaL-Jspb7XsLn {\n}\n\n._3qTEJI-SGaaBwcproq96Z9 {\n}\n\n._1C3jrn92-2_teD3Q_-WwDn {\n}\n", ""]);
+	exports.push([module.id, "._2L9xA27DMEbbq-N0RMbn_z {\r\n    margin-bottom: 3.2px;\r\n    margin-bottom: 0.2rem;\r\n}\r\n\r\n._1XwbHvBHdQjBsNYmsXimxa {\r\n}\r\n\r\n.Y624M2BNHPp6ruE1CIcE3 {\r\n}\r\n\r\n._1M5AZjSiUiYBwb9AWTk1AQ {\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"container": "_3Q9rTqv61jz1TMbQgSC21Y",
-		"name": "pfwgw1KVkaL-Jspb7XsLn " + __webpack_require__(27).locals["fieldName"] + "",
-		"argumentName": "_3qTEJI-SGaaBwcproq96Z9 " + __webpack_require__(27).locals["argumentName"] + "",
-		"defaultValue": "_1C3jrn92-2_teD3Q_-WwDn " + __webpack_require__(27).locals["defaultValue"] + ""
+		"container": "_2L9xA27DMEbbq-N0RMbn_z",
+		"name": "_1XwbHvBHdQjBsNYmsXimxa " + __webpack_require__(30).locals["fieldName"] + "",
+		"argumentName": "Y624M2BNHPp6ruE1CIcE3 " + __webpack_require__(30).locals["argumentName"] + "",
+		"defaultValue": "_1M5AZjSiUiYBwb9AWTk1AQ " + __webpack_require__(30).locals["defaultValue"] + ""
 	};
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4513,11 +4646,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _model = __webpack_require__(13);
 	
-	var _TypeRefView = __webpack_require__(24);
+	var _TypeRefView = __webpack_require__(27);
 	
 	var _DescriptionView = __webpack_require__(16);
 	
-	var _FieldArgumentsTableView = __webpack_require__(31);
+	var _FieldArgumentsTableView = __webpack_require__(34);
 	
 	var StyleSheet = _interopRequireWildcard(_FieldArgumentsTableView);
 	
@@ -4615,13 +4748,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react2.default.Component);
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(32);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4641,34 +4774,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(27), undefined);
+	exports.i(__webpack_require__(30), undefined);
 	
 	// module
-	exports.push([module.id, "._2u0NKWFUVO10_7zl5FH1bX {\n    margin-top: 16px;\n    margin-top: 1rem;\n    margin-left: 32px;\n    margin-left: 2rem;\n    width: calc(100% - 2rem);\n}\n\n._14Noc9w-o_IUonJxsVOnBQ {\n    text-align: left;\n    font-size: 17.6px;\n    font-size: 1.1rem;\n    border-bottom: 1px solid #d9d9d9;\n}\n\n._3qzzdu41HzTOjXefzRE8dy {\n}\n\n._3g8_wlJYIQqfvRx4Tdzt4u {\n    width: 100%;\n}\n\n._1XONXofpDzZZq1kxZDtU2p {\n}\n\n.Sb22PNqbe2ZV1oFtChBAD {\n}\n", ""]);
+	exports.push([module.id, "._38eoHDhGyPCFeLOBIjFIeJ {\r\n    margin-top: 16px;\r\n    margin-top: 1rem;\r\n    margin-left: 32px;\r\n    margin-left: 2rem;\r\n    width: calc(100% - 2rem);\r\n}\r\n\r\n._1zZivwxb0dAmeg4GVgg505 {\r\n    text-align: left;\r\n    font-size: 17.6px;\r\n    font-size: 1.1rem;\r\n    border-bottom: 1px solid #d9d9d9;\r\n}\r\n\r\n._3DDrXHFUubJb72bFuOrT6A {\r\n}\r\n\r\n._3Zh141RnIpkZG3uocM-frU {\r\n    width: 100%;\r\n}\r\n\r\n._2jmKNgEoWIJLQ2rpaw-7h5 {\r\n}\r\n\r\n._1DMIDO68ob2tAYVhOo_i-2 {\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"table": "_2u0NKWFUVO10_7zl5FH1bX",
-		"header": "_14Noc9w-o_IUonJxsVOnBQ",
-		"key": "_3qzzdu41HzTOjXefzRE8dy " + __webpack_require__(27).locals["argumentCell"] + "",
-		"value": "_3g8_wlJYIQqfvRx4Tdzt4u",
-		"row": "_1XONXofpDzZZq1kxZDtU2p " + __webpack_require__(27).locals["argumentRow"] + "",
-		"argumentName": "Sb22PNqbe2ZV1oFtChBAD " + __webpack_require__(27).locals["argumentName"] + ""
+		"table": "_38eoHDhGyPCFeLOBIjFIeJ",
+		"header": "_1zZivwxb0dAmeg4GVgg505",
+		"key": "_3DDrXHFUubJb72bFuOrT6A " + __webpack_require__(30).locals["argumentCell"] + "",
+		"value": "_3Zh141RnIpkZG3uocM-frU",
+		"row": "_2jmKNgEoWIJLQ2rpaw-7h5 " + __webpack_require__(30).locals["argumentRow"] + "",
+		"argumentName": "_1DMIDO68ob2tAYVhOo_i-2 " + __webpack_require__(30).locals["argumentName"] + ""
 	};
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(34);
+	var content = __webpack_require__(37);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4688,7 +4821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
@@ -4696,22 +4829,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "._2CI__araY4C94OAnkGP8Fv {\n    margin-bottom: 24px;\n    margin-bottom: 1.5rem;\n}\n\n._158AUimPZVUE217-1MuDQx {\n    margin-left: 32px;\n    margin-left: 2rem;\n}\n\n._158AUimPZVUE217-1MuDQx p {\n    margin-top: 0;\n}\n", ""]);
+	exports.push([module.id, "._2__u8PlNPSAn-LLyDog2rc {\r\n    margin-bottom: 24px;\r\n    margin-bottom: 1.5rem;\r\n}\r\n\r\n._2i-zhiLHB8PxvLQFmU5rZJ {\r\n    margin-left: 32px;\r\n    margin-left: 2rem;\r\n}\r\n\r\n._2i-zhiLHB8PxvLQFmU5rZJ p {\r\n    margin-top: 0;\r\n}\r\n\r\n.-KCfJu23yaNu54u4Uwuq- {\r\n    font-weight: bold;\r\n    color: crimson;\r\n}\r\n\r\n.-KCfJu23yaNu54u4Uwuq- p {\r\n    margin-top: 0;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
-		"container": "_2CI__araY4C94OAnkGP8Fv",
-		"description": "_158AUimPZVUE217-1MuDQx"
+		"container": "_2__u8PlNPSAn-LLyDog2rc",
+		"description": "_2i-zhiLHB8PxvLQFmU5rZJ",
+		"deprecated": "-KCfJu23yaNu54u4Uwuq-"
 	};
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(36);
+	var content = __webpack_require__(39);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4731,28 +4865,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(27), undefined);
+	exports.i(__webpack_require__(30), undefined);
 	
 	// module
-	exports.push([module.id, "._31nGuA4VcO5ASJ1Y-50NC0 {\n    margin-bottom: 20px;\n}\n\n._1hBwBkrQ8ZlOyOUcLvjRpt {\n    margin-bottom: 8px;\n    margin-bottom: 0.5rem;\n}\n\n._1gsHTtZCfZy0kwT90S9nZC {\n    -webkit-font-feature-settings: \"c2sc\";\n            font-feature-settings: \"c2sc\";\n    font-variant: small-caps;\n    text-transform: uppercase;\n    font-weight: bold;\n    color: #4a4a4a;\n    border-bottom: 1px solid #d9d9d9;\n    margin-top: 16px;\n    margin-top: 1rem;\n    margin-bottom: 8px;\n    margin-bottom: 0.5rem;\n}\n\n._2rkCQUiZ63eNMyTCRDL7GX {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\n\n.hI41jTQ51eUSGSCTegJoD {\n}\n\n.bHFx-gWNy1lALB9MKGx6U {\n}\n", ""]);
+	exports.push([module.id, "._14GiohI_QzlvTCpgm4smDz {\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.BHlkP7LCKipb0QwsMcnN6 {\r\n    margin-bottom: 8px;\r\n    margin-bottom: 0.5rem;\r\n}\r\n\r\n._1l_EuCD1R2-VE8ynHtdck- {\r\n    -webkit-font-feature-settings: \"c2sc\";\r\n            font-feature-settings: \"c2sc\";\r\n    font-variant: small-caps;\r\n    text-transform: uppercase;\r\n    font-weight: bold;\r\n    color: #4a4a4a;\r\n    border-bottom: 1px solid #d9d9d9;\r\n    margin-top: 16px;\r\n    margin-top: 1rem;\r\n    margin-bottom: 8px;\r\n    margin-bottom: 0.5rem;\r\n}\r\n\r\n.vYEVttTWl1ekl4MK-FTwL {\r\n    list-style: none;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.eSNCbWsofis41y2WFFp-i {\r\n}\r\n._1aOaR39fwVwfZL6HVy-EGA {\r\n    color: crimson;\r\n    text-decoration: line-through;\r\n}\r\n\r\n.BnHsnoSNYpKC5rHcDxk10 {\r\n}\r\n", ""]);
 	
 	// exports
 	exports.locals = {
-		"type": "_31nGuA4VcO5ASJ1Y-50NC0",
-		"heading": "_1hBwBkrQ8ZlOyOUcLvjRpt",
-		"subHeading": "_1gsHTtZCfZy0kwT90S9nZC",
-		"interfacesList": "_2rkCQUiZ63eNMyTCRDL7GX",
-		"enumName": "hI41jTQ51eUSGSCTegJoD " + __webpack_require__(27).locals["argumentName"] + " " + __webpack_require__(27).locals["argumentCell"] + "",
-		"enumRow": "bHFx-gWNy1lALB9MKGx6U " + __webpack_require__(27).locals["argumentRow"] + ""
+		"type": "_14GiohI_QzlvTCpgm4smDz",
+		"heading": "BHlkP7LCKipb0QwsMcnN6",
+		"subHeading": "_1l_EuCD1R2-VE8ynHtdck-",
+		"interfacesList": "vYEVttTWl1ekl4MK-FTwL",
+		"enumName": "eSNCbWsofis41y2WFFp-i " + __webpack_require__(30).locals["argumentName"] + " " + __webpack_require__(30).locals["argumentCell"] + "",
+		"enumNameDeprecated": "_1aOaR39fwVwfZL6HVy-EGA " + __webpack_require__(30).locals["argumentName"] + " " + __webpack_require__(30).locals["argumentCell"] + "",
+		"enumRow": "BnHsnoSNYpKC5rHcDxk10 " + __webpack_require__(30).locals["argumentRow"] + ""
 	};
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4767,7 +4902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _SectionView = __webpack_require__(38);
+	var _SectionView = __webpack_require__(41);
 	
 	var StyleSheet = _interopRequireWildcard(_SectionView);
 	
@@ -4815,13 +4950,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = SectionView;
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(39);
+	var content = __webpack_require__(42);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4841,23 +4976,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(40), "");
+	exports.i(__webpack_require__(43), "");
 	
 	// module
-	exports.push([module.id, ".L1v8qWjjMTDbscwjQgB_s {\n    padding: 10px;\n}", ""]);
+	exports.push([module.id, "._35GXFfFvgsE9MAYT-BmkaN {\r\n    padding: 10px;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
-		"section": "L1v8qWjjMTDbscwjQgB_s"
+		"section": "_35GXFfFvgsE9MAYT-BmkaN"
 	};
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
@@ -4865,13 +5000,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */\n\n* {\n  box-sizing: border-box;\n}\n\n/**\n * 1. Change the default font family in all browsers (opinionated).\n * 2. Prevent adjustments of font size after orientation changes in IE and iOS.\n */\n\nhtml {\n  font-family: -apple-system, BlinkMacSystemFont,\n    \"Segoe UI\", \"Roboto\", \"Oxygen\", \"Ubuntu\", \"Cantarell\",\n    \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\n    sans-serif; /* 1 */\n  -ms-text-size-adjust: 100%; /* 2 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n}\n\n/**\n * Remove the margin in all browsers (opinionated).\n */\n\nbody {\n  margin: 0 8px;\n}\n\n/* HTML5 display definitions\n   ========================================================================== */\n\n/**\n * Add the correct display in IE 9-.\n * 1. Add the correct display in Edge, IE, and Firefox.\n * 2. Add the correct display in IE.\n */\n\narticle,\naside,\ndetails, /* 1 */\nfigcaption,\nfigure,\nfooter,\nheader,\nmain, /* 2 */\nmenu,\nnav,\nsection,\nsummary { /* 1 */\n  display: block;\n}\n\n/**\n * Add the correct display in IE 9-.\n */\n\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n}\n\n/**\n * Add the correct display in iOS 4-7.\n */\n\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n\n/**\n * Add the correct vertical alignment in Chrome, Firefox, and Opera.\n */\n\nprogress {\n  vertical-align: baseline;\n}\n\n/**\n * Add the correct display in IE 10-.\n * 1. Add the correct display in IE.\n */\n\ntemplate, /* 1 */\n[hidden] {\n  display: none;\n}\n\n/* Links\n   ========================================================================== */\n\n/**\n * 1. Remove the gray background on active links in IE 10.\n * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.\n */\n\na {\n  background-color: transparent; /* 1 */\n   -webkit-text-decoration-skip: ink;  /* 2 */\n}\n\n/**\n * Remove the outline on focused links when they are also active or hovered\n * in all browsers (opinionated).\n */\n\na:active,\na:hover {\n  outline-width: 0;\n}\n\n/* Text-level semantics\n   ========================================================================== */\n\n/**\n * 1. Remove the bottom border in Firefox 39-.\n * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.\n */\n\nabbr[title] {\n  border-bottom: none; /* 1 */\n  text-decoration: underline; /* 2 */\n  text-decoration: underline dotted; /* 2 */\n}\n\n/**\n * Prevent the duplicate application of `bolder` by the next rule in Safari 6.\n */\n\nb,\nstrong {\n  font-weight: inherit;\n}\n\n/**\n * Add the correct font weight in Chrome, Edge, and Safari.\n */\n\nb,\nstrong {\n  font-weight: bolder;\n}\n\n/**\n * Add the correct font style in Android 4.3-.\n */\n\ndfn {\n  font-style: italic;\n}\n\n/**\n * Correct the font size and margin on `h1` elements within `section` and\n * `article` contexts in Chrome, Firefox, and Safari.\n */\n\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\n/**\n * Add the correct background and color in IE 9-.\n */\n\nmark {\n  background-color: #ff0;\n  color: #000;\n}\n\n/**\n * Add the correct font size in all browsers.\n */\n\nsmall {\n  font-size: 80%;\n}\n\n/**\n * Prevent `sub` and `sup` elements from affecting the line height in\n * all browsers.\n */\n\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\nsup {\n  top: -0.5em;\n}\n\n/* Embedded content\n   ========================================================================== */\n\n/**\n * Remove the border on images inside links in IE 10-.\n */\n\nimg {\n  border-style: none;\n}\n\n/**\n * Hide the overflow in IE.\n */\n\nsvg:not(:root) {\n  overflow: hidden;\n}\n\n/* Grouping content\n   ========================================================================== */\n\n/**\n * 1. Correct the inheritance and scaling of font size in all browsers.\n * 2. Correct the odd `em` font sizing in all browsers.\n */\n\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace; /* 1 */\n  font-size: 1em; /* 2 */\n}\n\n/**\n * Add the correct margin in IE 8.\n */\n\nfigure {\n  margin: 1em 40px;\n}\n\n/**\n * 1. Add the correct box sizing in Firefox.\n * 2. Show the overflow in Edge and IE.\n */\n\nhr {\n  box-sizing: content-box; /* 1 */\n  height: 0; /* 1 */\n  overflow: visible; /* 2 */\n}\n\n/* Forms\n   ========================================================================== */\n\n/**\n * 1. Change font properties to `inherit` in all browsers (opinionated).\n * 2. Remove the margin in Firefox and Safari.\n */\n\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font: inherit; /* 1 */\n  margin: 0; /* 2 */\n}\n\n/**\n * Restore the font weight unset by the previous rule.\n */\n\noptgroup {\n  font-weight: bold;\n}\n\n/**\n * Show the overflow in IE.\n * 1. Show the overflow in Edge.\n */\n\nbutton,\ninput { /* 1 */\n  overflow: visible;\n}\n\n/**\n * Remove the inheritance of text transform in Edge, Firefox, and IE.\n * 1. Remove the inheritance of text transform in Firefox.\n */\n\nbutton,\nselect { /* 1 */\n  text-transform: none;\n}\n\n/**\n * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`\n *    controls in Android 4.\n * 2. Correct the inability to style clickable types in iOS and Safari.\n */\n\nbutton,\nhtml [type=\"button\"], /* 1 */\n[type=\"reset\"],\n[type=\"submit\"] {\n  -webkit-appearance: button; /* 2 */\n}\n\n/**\n * Remove the inner border and padding in Firefox.\n */\n\nbutton::-moz-focus-inner,\n[type=\"button\"]::-moz-focus-inner,\n[type=\"reset\"]::-moz-focus-inner,\n[type=\"submit\"]::-moz-focus-inner {\n  border-style: none;\n  padding: 0;\n}\n\n/**\n * Restore the focus styles unset by the previous rule.\n */\n\nbutton:-moz-focusring,\n[type=\"button\"]:-moz-focusring,\n[type=\"reset\"]:-moz-focusring,\n[type=\"submit\"]:-moz-focusring {\n  outline: 1px dotted ButtonText;\n}\n\n/**\n * Change the border, margin, and padding in all browsers (opinionated).\n */\n\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\n\n/**\n * 1. Correct the text wrapping in Edge and IE.\n * 2. Correct the color inheritance from `fieldset` elements in IE.\n * 3. Remove the padding so developers are not caught out when they zero out\n *    `fieldset` elements in all browsers.\n */\n\nlegend {\n  box-sizing: border-box; /* 1 */\n  color: inherit; /* 2 */\n  display: table; /* 1 */\n  max-width: 100%; /* 1 */\n  padding: 0; /* 3 */\n  white-space: normal; /* 1 */\n}\n\n/**\n * Remove the default vertical scrollbar in IE.\n */\n\ntextarea {\n  overflow: auto;\n}\n\n/**\n * 1. Add the correct box sizing in IE 10-.\n * 2. Remove the padding in IE 10-.\n */\n\n[type=\"checkbox\"],\n[type=\"radio\"] {\n  box-sizing: border-box; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Correct the cursor style of increment and decrement buttons in Chrome.\n */\n\n[type=\"number\"]::-webkit-inner-spin-button,\n[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/**\n * 1. Correct the odd appearance in Chrome and Safari.\n * 2. Correct the outline style in Safari.\n */\n\n[type=\"search\"] {\n  -webkit-appearance: textfield; /* 1 */\n  outline-offset: -2px; /* 2 */\n}\n\n/**\n * Remove the inner padding and cancel buttons in Chrome and Safari on OS X.\n */\n\n[type=\"search\"]::-webkit-search-cancel-button,\n[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/**\n * Correct the text style of placeholders in Chrome, Edge, and Safari.\n */\n\n::-webkit-input-placeholder {\n  color: inherit;\n  opacity: 0.54;\n}\n\n/**\n * 1. Correct the inability to style clickable types in iOS and Safari.\n * 2. Change font properties to `inherit` in Safari.\n */\n\n::-webkit-file-upload-button {\n  -webkit-appearance: button; /* 1 */\n  font: inherit; /* 2 */\n}\n", ""]);
+	exports.push([module.id, "/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */\r\n\r\n* {\r\n  box-sizing: border-box;\r\n}\r\n\r\n/**\r\n * 1. Change the default font family in all browsers (opinionated).\r\n * 2. Prevent adjustments of font size after orientation changes in IE and iOS.\r\n */\r\n\r\nhtml {\r\n  font-family: -apple-system, BlinkMacSystemFont,\r\n    \"Segoe UI\", \"Roboto\", \"Oxygen\", \"Ubuntu\", \"Cantarell\",\r\n    \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif; /* 1 */\r\n  -ms-text-size-adjust: 100%; /* 2 */\r\n  -webkit-text-size-adjust: 100%; /* 2 */\r\n}\r\n\r\n/**\r\n * Remove the margin in all browsers (opinionated).\r\n */\r\n\r\nbody {\r\n  margin: 0 8px;\r\n}\r\n\r\n/* HTML5 display definitions\r\n   ========================================================================== */\r\n\r\n/**\r\n * Add the correct display in IE 9-.\r\n * 1. Add the correct display in Edge, IE, and Firefox.\r\n * 2. Add the correct display in IE.\r\n */\r\n\r\narticle,\r\naside,\r\ndetails, /* 1 */\r\nfigcaption,\r\nfigure,\r\nfooter,\r\nheader,\r\nmain, /* 2 */\r\nmenu,\r\nnav,\r\nsection,\r\nsummary { /* 1 */\r\n  display: block;\r\n}\r\n\r\n/**\r\n * Add the correct display in IE 9-.\r\n */\r\n\r\naudio,\r\ncanvas,\r\nprogress,\r\nvideo {\r\n  display: inline-block;\r\n}\r\n\r\n/**\r\n * Add the correct display in iOS 4-7.\r\n */\r\n\r\naudio:not([controls]) {\r\n  display: none;\r\n  height: 0;\r\n}\r\n\r\n/**\r\n * Add the correct vertical alignment in Chrome, Firefox, and Opera.\r\n */\r\n\r\nprogress {\r\n  vertical-align: baseline;\r\n}\r\n\r\n/**\r\n * Add the correct display in IE 10-.\r\n * 1. Add the correct display in IE.\r\n */\r\n\r\ntemplate, /* 1 */\r\n[hidden] {\r\n  display: none;\r\n}\r\n\r\n/* Links\r\n   ========================================================================== */\r\n\r\n/**\r\n * 1. Remove the gray background on active links in IE 10.\r\n * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.\r\n */\r\n\r\na {\r\n  background-color: transparent; /* 1 */\r\n   -webkit-text-decoration-skip: ink;  /* 2 */\r\n}\r\n\r\n/**\r\n * Remove the outline on focused links when they are also active or hovered\r\n * in all browsers (opinionated).\r\n */\r\n\r\na:active,\r\na:hover {\r\n  outline-width: 0;\r\n}\r\n\r\n/* Text-level semantics\r\n   ========================================================================== */\r\n\r\n/**\r\n * 1. Remove the bottom border in Firefox 39-.\r\n * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.\r\n */\r\n\r\nabbr[title] {\r\n  border-bottom: none; /* 1 */\r\n  text-decoration: underline; /* 2 */\r\n  text-decoration: underline dotted; /* 2 */\r\n}\r\n\r\n/**\r\n * Prevent the duplicate application of `bolder` by the next rule in Safari 6.\r\n */\r\n\r\nb,\r\nstrong {\r\n  font-weight: inherit;\r\n}\r\n\r\n/**\r\n * Add the correct font weight in Chrome, Edge, and Safari.\r\n */\r\n\r\nb,\r\nstrong {\r\n  font-weight: bolder;\r\n}\r\n\r\n/**\r\n * Add the correct font style in Android 4.3-.\r\n */\r\n\r\ndfn {\r\n  font-style: italic;\r\n}\r\n\r\n/**\r\n * Correct the font size and margin on `h1` elements within `section` and\r\n * `article` contexts in Chrome, Firefox, and Safari.\r\n */\r\n\r\nh1 {\r\n  font-size: 2em;\r\n  margin: 0.67em 0;\r\n}\r\n\r\n/**\r\n * Add the correct background and color in IE 9-.\r\n */\r\n\r\nmark {\r\n  background-color: #ff0;\r\n  color: #000;\r\n}\r\n\r\n/**\r\n * Add the correct font size in all browsers.\r\n */\r\n\r\nsmall {\r\n  font-size: 80%;\r\n}\r\n\r\n/**\r\n * Prevent `sub` and `sup` elements from affecting the line height in\r\n * all browsers.\r\n */\r\n\r\nsub,\r\nsup {\r\n  font-size: 75%;\r\n  line-height: 0;\r\n  position: relative;\r\n  vertical-align: baseline;\r\n}\r\n\r\nsub {\r\n  bottom: -0.25em;\r\n}\r\n\r\nsup {\r\n  top: -0.5em;\r\n}\r\n\r\n/* Embedded content\r\n   ========================================================================== */\r\n\r\n/**\r\n * Remove the border on images inside links in IE 10-.\r\n */\r\n\r\nimg {\r\n  border-style: none;\r\n}\r\n\r\n/**\r\n * Hide the overflow in IE.\r\n */\r\n\r\nsvg:not(:root) {\r\n  overflow: hidden;\r\n}\r\n\r\n/* Grouping content\r\n   ========================================================================== */\r\n\r\n/**\r\n * 1. Correct the inheritance and scaling of font size in all browsers.\r\n * 2. Correct the odd `em` font sizing in all browsers.\r\n */\r\n\r\ncode,\r\nkbd,\r\npre,\r\nsamp {\r\n  font-family: monospace, monospace; /* 1 */\r\n  font-size: 1em; /* 2 */\r\n}\r\n\r\n/**\r\n * Add the correct margin in IE 8.\r\n */\r\n\r\nfigure {\r\n  margin: 1em 40px;\r\n}\r\n\r\n/**\r\n * 1. Add the correct box sizing in Firefox.\r\n * 2. Show the overflow in Edge and IE.\r\n */\r\n\r\nhr {\r\n  box-sizing: content-box; /* 1 */\r\n  height: 0; /* 1 */\r\n  overflow: visible; /* 2 */\r\n}\r\n\r\n/* Forms\r\n   ========================================================================== */\r\n\r\n/**\r\n * 1. Change font properties to `inherit` in all browsers (opinionated).\r\n * 2. Remove the margin in Firefox and Safari.\r\n */\r\n\r\nbutton,\r\ninput,\r\noptgroup,\r\nselect,\r\ntextarea {\r\n  font: inherit; /* 1 */\r\n  margin: 0; /* 2 */\r\n}\r\n\r\n/**\r\n * Restore the font weight unset by the previous rule.\r\n */\r\n\r\noptgroup {\r\n  font-weight: bold;\r\n}\r\n\r\n/**\r\n * Show the overflow in IE.\r\n * 1. Show the overflow in Edge.\r\n */\r\n\r\nbutton,\r\ninput { /* 1 */\r\n  overflow: visible;\r\n}\r\n\r\n/**\r\n * Remove the inheritance of text transform in Edge, Firefox, and IE.\r\n * 1. Remove the inheritance of text transform in Firefox.\r\n */\r\n\r\nbutton,\r\nselect { /* 1 */\r\n  text-transform: none;\r\n}\r\n\r\n/**\r\n * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`\r\n *    controls in Android 4.\r\n * 2. Correct the inability to style clickable types in iOS and Safari.\r\n */\r\n\r\nbutton,\r\nhtml [type=\"button\"], /* 1 */\r\n[type=\"reset\"],\r\n[type=\"submit\"] {\r\n  -webkit-appearance: button; /* 2 */\r\n}\r\n\r\n/**\r\n * Remove the inner border and padding in Firefox.\r\n */\r\n\r\nbutton::-moz-focus-inner,\r\n[type=\"button\"]::-moz-focus-inner,\r\n[type=\"reset\"]::-moz-focus-inner,\r\n[type=\"submit\"]::-moz-focus-inner {\r\n  border-style: none;\r\n  padding: 0;\r\n}\r\n\r\n/**\r\n * Restore the focus styles unset by the previous rule.\r\n */\r\n\r\nbutton:-moz-focusring,\r\n[type=\"button\"]:-moz-focusring,\r\n[type=\"reset\"]:-moz-focusring,\r\n[type=\"submit\"]:-moz-focusring {\r\n  outline: 1px dotted ButtonText;\r\n}\r\n\r\n/**\r\n * Change the border, margin, and padding in all browsers (opinionated).\r\n */\r\n\r\nfieldset {\r\n  border: 1px solid #c0c0c0;\r\n  margin: 0 2px;\r\n  padding: 0.35em 0.625em 0.75em;\r\n}\r\n\r\n/**\r\n * 1. Correct the text wrapping in Edge and IE.\r\n * 2. Correct the color inheritance from `fieldset` elements in IE.\r\n * 3. Remove the padding so developers are not caught out when they zero out\r\n *    `fieldset` elements in all browsers.\r\n */\r\n\r\nlegend {\r\n  box-sizing: border-box; /* 1 */\r\n  color: inherit; /* 2 */\r\n  display: table; /* 1 */\r\n  max-width: 100%; /* 1 */\r\n  padding: 0; /* 3 */\r\n  white-space: normal; /* 1 */\r\n}\r\n\r\n/**\r\n * Remove the default vertical scrollbar in IE.\r\n */\r\n\r\ntextarea {\r\n  overflow: auto;\r\n}\r\n\r\n/**\r\n * 1. Add the correct box sizing in IE 10-.\r\n * 2. Remove the padding in IE 10-.\r\n */\r\n\r\n[type=\"checkbox\"],\r\n[type=\"radio\"] {\r\n  box-sizing: border-box; /* 1 */\r\n  padding: 0; /* 2 */\r\n}\r\n\r\n/**\r\n * Correct the cursor style of increment and decrement buttons in Chrome.\r\n */\r\n\r\n[type=\"number\"]::-webkit-inner-spin-button,\r\n[type=\"number\"]::-webkit-outer-spin-button {\r\n  height: auto;\r\n}\r\n\r\n/**\r\n * 1. Correct the odd appearance in Chrome and Safari.\r\n * 2. Correct the outline style in Safari.\r\n */\r\n\r\n[type=\"search\"] {\r\n  -webkit-appearance: textfield; /* 1 */\r\n  outline-offset: -2px; /* 2 */\r\n}\r\n\r\n/**\r\n * Remove the inner padding and cancel buttons in Chrome and Safari on OS X.\r\n */\r\n\r\n[type=\"search\"]::-webkit-search-cancel-button,\r\n[type=\"search\"]::-webkit-search-decoration {\r\n  -webkit-appearance: none;\r\n}\r\n\r\n/**\r\n * Correct the text style of placeholders in Chrome, Edge, and Safari.\r\n */\r\n\r\n::-webkit-input-placeholder {\r\n  color: inherit;\r\n  opacity: 0.54;\r\n}\r\n\r\n/**\r\n * 1. Correct the inability to style clickable types in iOS and Safari.\r\n * 2. Change font properties to `inherit` in Safari.\r\n */\r\n\r\n::-webkit-file-upload-button {\r\n  -webkit-appearance: button; /* 1 */\r\n  font: inherit; /* 2 */\r\n}\r\n", ""]);
 	
 	// exports
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4886,7 +5021,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _SideNavSectionView = __webpack_require__(42);
+	var _SideNavSectionView = __webpack_require__(45);
 	
 	var StyleSheet = _interopRequireWildcard(_SideNavSectionView);
 	
@@ -4946,13 +5081,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = SideNavSectionView;
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(43);
+	var content = __webpack_require__(46);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -4972,31 +5107,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(40), "");
+	exports.i(__webpack_require__(43), "");
 	
 	// module
-	exports.push([module.id, "._1xGW5JKJn4TysMIRtV4bNC {\n    width: 100%;\n}\n\n._2MbtXVBhy0ow1PGFq442II,\n._1wz12CHPOX1ElLLZ7I3avj {\n    width: 100%;\n}\n\n._2MbtXVBhy0ow1PGFq442II > a,\n._1wz12CHPOX1ElLLZ7I3avj > a {\n    display: block;\n    width: 100%;\n    height: 100%;\n    padding: 10px;\n    text-decoration: none;\n    color: darkgray;\n}\n\n._2MbtXVBhy0ow1PGFq442II > a {\n    text-transform: uppercase;\n    color: #222222;\n}\n\n._1wz12CHPOX1ElLLZ7I3avj:hover,\n._2MbtXVBhy0ow1PGFq442II:hover {\n    background: lightgray;\n}", ""]);
+	exports.push([module.id, "._3snReR-zjRkZnaYhkn44H2 {\r\n    width: 100%;\r\n}\r\n\r\n._17WopTR1apuAeanXWTDwDi,\r\n._3LDDiq4icLjja1PVeMGymW {\r\n    width: 100%;\r\n}\r\n\r\n._17WopTR1apuAeanXWTDwDi > a,\r\n._3LDDiq4icLjja1PVeMGymW > a {\r\n    display: block;\r\n    width: 100%;\r\n    height: 100%;\r\n    padding: 10px;\r\n    text-decoration: none;\r\n    color: darkgray;\r\n}\r\n\r\n._17WopTR1apuAeanXWTDwDi > a {\r\n    text-transform: uppercase;\r\n    color: #222222;\r\n}\r\n\r\n._3LDDiq4icLjja1PVeMGymW:hover,\r\n._17WopTR1apuAeanXWTDwDi:hover {\r\n    background: lightgray;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
-		"sidenavSection": "_1xGW5JKJn4TysMIRtV4bNC",
-		"sectionLink": "_2MbtXVBhy0ow1PGFq442II",
-		"typeLink": "_1wz12CHPOX1ElLLZ7I3avj"
+		"sidenavSection": "_3snReR-zjRkZnaYhkn44H2",
+		"sectionLink": "_17WopTR1apuAeanXWTDwDi",
+		"typeLink": "_3LDDiq4icLjja1PVeMGymW"
 	};
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(45);
+	var content = __webpack_require__(48);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(21)(content, {});
@@ -5016,33 +5151,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(20)();
 	// imports
-	exports.i(__webpack_require__(40), "");
+	exports.i(__webpack_require__(43), "");
 	
 	// module
-	exports.push([module.id, "._2Wa9wu-awiDVZ9IXTPcyFt {\n    height: 100vh;\n}\n\n._38MtHDcUga2pYTxIRJJZ8o {\n    padding-right: 10%;\n    padding-left: 10%;\n}\n\n._2g11fbDuD18M7-sHGYuAfi {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    margin-left: 270px;\n}\n\n._8ogFihsx3UFu7jnisJFQh {\n    position: fixed;\n    overflow-y: scroll;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    width: 250px;\n}\n\n._8ogFihsx3UFu7jnisJFQh::-webkit-scrollbar\n{\n    width: 12px;\n    background-color: #f1f1f1;\n}\n\n._8ogFihsx3UFu7jnisJFQh::-webkit-scrollbar-thumb\n{\n    border-radius: 10px;\n    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\n    background-color: #d0d0d0;\n}\n\n._3LliCFvyD_zfkKsrqSHqky {\n    display: block;\n    border-radius: 10px;\n    border: 2px solid darkgray;\n    color: darkgray;\n    width: 220px;\n    font-size: 16px;\n    font-size: 1rem;\n    padding: 10px;\n    margin: 20px 10px 0 10px;\n}\n\n._3LliCFvyD_zfkKsrqSHqky:hover,\n._3LliCFvyD_zfkKsrqSHqky:focus\n{\n    outline: none;\n}\n\n._3UYhBB4Rkyjb1nRvUGQPGD {\n    list-style: none;\n    margin:0;\n    padding:0;\n}\n\n._2DORhY6kDat0gOnScCJ4kz {\n    padding: 3px 3px 3px 18px;\n    width: 100%;\n}\n\n._2DORhY6kDat0gOnScCJ4kz:hover {\n    background: lightgray;\n}\n\n._2DORhY6kDat0gOnScCJ4kz > a {\n    display: block;\n    width: 100%;\n    color: darkgray;\n    text-decoration: none;\n    padding: 3px;\n}\n\n._3EiuFTC5cjTgHZ9HNaG1AS {\n    background: lightgray;\n}", ""]);
+	exports.push([module.id, "._3OG4DV5OpCPYOAFuZk6E33 {\r\n    height: 100vh;\r\n}\r\n\r\n._1PKyCmYZcgkownwgVZDLiX {\r\n    padding-right: 10%;\r\n    padding-left: 10%;\r\n}\r\n\r\n._2psgRClksBjhA2dMZIto8n {\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\r\n    -webkit-box-pack: center;\r\n        -ms-flex-pack: center;\r\n            justify-content: center;\r\n    margin-left: 270px;\r\n}\r\n\r\n._1r5McibAbKcxghYda4fb5P {\r\n    position: fixed;\r\n    overflow-y: scroll;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    width: 250px;\r\n}\r\n\r\n._1r5McibAbKcxghYda4fb5P::-webkit-scrollbar\r\n{\r\n    width: 12px;\r\n    background-color: #f1f1f1;\r\n}\r\n\r\n._1r5McibAbKcxghYda4fb5P::-webkit-scrollbar-thumb\r\n{\r\n    border-radius: 10px;\r\n    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\r\n    background-color: #d0d0d0;\r\n}\r\n\r\n._1QM-mXJuvu7pDNLGStlP5U {\r\n    display: block;\r\n    border-radius: 10px;\r\n    border: 2px solid darkgray;\r\n    color: darkgray;\r\n    width: 220px;\r\n    font-size: 16px;\r\n    font-size: 1rem;\r\n    padding: 10px;\r\n    margin: 20px 10px 0 10px;\r\n}\r\n\r\n._1QM-mXJuvu7pDNLGStlP5U:hover,\r\n._1QM-mXJuvu7pDNLGStlP5U:focus\r\n{\r\n    outline: none;\r\n}\r\n\r\n._3Nojj1QOzq7EOxzSPyQ9JJ {\r\n    list-style: none;\r\n    margin:0;\r\n    padding:0;\r\n}\r\n\r\n._1tpeYqhKd1wyic6LdiWicA {\r\n    padding: 3px 3px 3px 18px;\r\n    width: 100%;\r\n}\r\n\r\n._1tpeYqhKd1wyic6LdiWicA:hover {\r\n    background: lightgray;\r\n}\r\n\r\n._1tpeYqhKd1wyic6LdiWicA > a {\r\n    display: block;\r\n    width: 100%;\r\n    color: darkgray;\r\n    text-decoration: none;\r\n    padding: 3px;\r\n}\r\n\r\n._6IUXxUgfgw_Lnpp21CMG2 {\r\n    background: lightgray;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
-		"wrapper": "_2Wa9wu-awiDVZ9IXTPcyFt",
-		"container": "_38MtHDcUga2pYTxIRJJZ8o",
-		"content": "_2g11fbDuD18M7-sHGYuAfi",
-		"sidenav": "_8ogFihsx3UFu7jnisJFQh",
-		"selectInput": "_3LliCFvyD_zfkKsrqSHqky",
-		"selectList": "_3UYhBB4Rkyjb1nRvUGQPGD",
-		"selectItem": "_2DORhY6kDat0gOnScCJ4kz",
-		"selectHover": "_3EiuFTC5cjTgHZ9HNaG1AS"
+		"wrapper": "_3OG4DV5OpCPYOAFuZk6E33",
+		"container": "_1PKyCmYZcgkownwgVZDLiX",
+		"content": "_2psgRClksBjhA2dMZIto8n",
+		"sidenav": "_1r5McibAbKcxghYda4fb5P",
+		"selectInput": "_1QM-mXJuvu7pDNLGStlP5U",
+		"selectList": "_3Nojj1QOzq7EOxzSPyQ9JJ",
+		"selectItem": "_1tpeYqhKd1wyic6LdiWicA",
+		"selectHover": "_6IUXxUgfgw_Lnpp21CMG2"
 	};
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, exports) {
 
-	module.exports = "query IntrospectionQuery {\n  __schema {\n    queryType {\n      name\n    }\n    mutationType {\n      name\n    }\n    subscriptionType {\n      name\n    }\n    types {\n      ...FullType\n    }\n    directives {\n      name\n      description\n      args {\n        ...InputValue\n      }\n      onOperation\n      onFragment\n      onField\n    }\n  }\n}\n\nfragment FullType on __Type {\n  kind\n  name\n  description\n  fields(includeDeprecated: true) {\n    name\n    description\n    args {\n      ...InputValue\n    }\n    type {\n      ...TypeRef\n    }\n    isDeprecated\n    deprecationReason\n  }\n  inputFields {\n    ...InputValue\n  }\n  interfaces {\n    ...TypeRef\n  }\n  enumValues(includeDeprecated: true) {\n    name\n    description\n    isDeprecated\n    deprecationReason\n  }\n  possibleTypes {\n    ...TypeRef\n  }\n}\n\nfragment InputValue on __InputValue {\n  name\n  description\n  type {\n    ...TypeRef\n  }\n  defaultValue\n}\n\nfragment TypeRef on __Type {\n  kind\n  name\n  ofType {\n    kind\n    name\n    ofType {\n      kind\n      name\n      ofType {\n        kind\n        name\n      }\n    }\n  }\n}\n\n"
+	module.exports = "query IntrospectionQuery {\r\n  __schema {\r\n    queryType {\r\n      name\r\n    }\r\n    mutationType {\r\n      name\r\n    }\r\n    subscriptionType {\r\n      name\r\n    }\r\n    types {\r\n      ...FullType\r\n    }\r\n    directives {\r\n      name\r\n      description\r\n      args {\r\n        ...InputValue\r\n      }\r\n      onOperation\r\n      onFragment\r\n      onField\r\n    }\r\n  }\r\n}\r\n\r\nfragment FullType on __Type {\r\n  kind\r\n  name\r\n  description\r\n  fields(includeDeprecated: true) {\r\n    name\r\n    description\r\n    args {\r\n      ...InputValue\r\n    }\r\n    type {\r\n      ...TypeRef\r\n    }\r\n    isDeprecated\r\n    deprecationReason\r\n  }\r\n  inputFields {\r\n    ...InputValue\r\n  }\r\n  interfaces {\r\n    ...TypeRef\r\n  }\r\n  enumValues(includeDeprecated: true) {\r\n    name\r\n    description\r\n    isDeprecated\r\n    deprecationReason\r\n  }\r\n  possibleTypes {\r\n    ...TypeRef\r\n  }\r\n}\r\n\r\nfragment InputValue on __InputValue {\r\n  name\r\n  description\r\n  type {\r\n    ...TypeRef\r\n  }\r\n  defaultValue\r\n}\r\n\r\nfragment TypeRef on __Type {\r\n  kind\r\n  name\r\n  ofType {\r\n    kind\r\n    name\r\n    ofType {\r\n      kind\r\n      name\r\n      ofType {\r\n        kind\r\n        name\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\n"
 
 /***/ })
 /******/ ])
