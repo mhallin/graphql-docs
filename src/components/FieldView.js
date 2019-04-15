@@ -5,6 +5,7 @@ import React from 'react';
 import { Field } from '../model';
 
 import { DescriptionView } from './DescriptionView';
+import { DeprecatedView } from './DeprecatedView';
 import { FieldSyntaxView } from './FieldSyntaxView';
 import { FieldArgumentsTableView } from './FieldArgumentsTableView';
 
@@ -25,6 +26,7 @@ export class FieldView extends React.Component {
             >
                 <FieldSyntaxView field={field} />
                 {this.renderDescription(field.description)}
+                {this.renderDeprecated(field.isDeprecated, field.deprecationReason)}
                 <FieldArgumentsTableView args={field.args} />
             </div>
         );
@@ -39,6 +41,19 @@ export class FieldView extends React.Component {
             <DescriptionView
                 className={StyleSheet.description}
                 description={description}
+            />
+        );
+    }
+
+    renderDeprecated(isDeprecated: boolean, reason: ?string) {
+        if (!isDeprecated) {
+            return null;
+        }
+
+        return (
+            <DeprecatedView
+                className={StyleSheet.deprecated}
+                reason={reason}
             />
         );
     }

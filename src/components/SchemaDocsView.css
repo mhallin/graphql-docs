@@ -1,10 +1,82 @@
 @import "./_normalize.css";
 
 .wrapper {
-    display: flex;
-    justify-content: center;
+    height: 100vh;
 }
 
 .container {
-    max-width: 800px;
+    padding-right: 10%;
+    padding-left: 10%;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    margin-left: 270px;
+}
+
+.sidenav {
+    position: fixed;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+}
+
+.sidenav::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #f1f1f1;
+}
+
+.sidenav::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #d0d0d0;
+}
+
+.selectInput {
+    display: block;
+    border-radius: 10px;
+    border: 2px solid darkgray;
+    color: darkgray;
+    width: 220px;
+    font-size: 1rem;
+    padding: 10px;
+    margin: 20px 10px 0 10px;
+}
+
+.selectInput:hover,
+.selectInput:focus
+{
+    outline: none;
+}
+
+.selectList {
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+.selectItem {
+    padding: 3px 3px 3px 18px;
+    width: 100%;
+}
+
+.selectItem:hover {
+    background: lightgray;
+}
+
+.selectItem > a {
+    display: block;
+    width: 100%;
+    color: darkgray;
+    text-decoration: none;
+    padding: 3px;
+}
+
+.selectHover {
+    background: lightgray;
 }

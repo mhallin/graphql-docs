@@ -6,6 +6,7 @@ export const TYPE_KINDS = [
     'OBJECT',
     'ENUM',
     'INPUT_OBJECT',
+    'UNION',
 ];
 
 export type TypeId = string;
@@ -79,6 +80,8 @@ export class Type {
             return new EnumType(introspectionType);
         } else if (introspectionType.kind === 'INPUT_OBJECT') {
             return new InputObjectType(introspectionType);
+        } else if (introspectionType.kind === 'UNION') {
+            return new UnionType(introspectionType);
         } else {
             throw new Error('Unsupported type kind: ' + introspectionType.kind);
         }
@@ -119,6 +122,21 @@ export class ObjectType extends Type {
     }
 }
 
+export class UnionType extends Type {
+    possibleTypes: Array<TypeRef>;
+
+    constructor(introspectionType: any) {
+        pre: {
+            introspectionType.kind === 'UNION';
+            !introspectionType.possibleTypesArray || Array.isArray(introspectionType.possibleTypes);
+        }
+
+        super(introspectionType);
+
+        this.possibleTypes = (introspectionType.possibleTypes || []).map(r => TypeRef.fromIntrospectionRef(r));
+    }
+}
+
 export class ScalarType extends Type {
     constructor(introspectionType: any) {
         pre: {
@@ -137,13 +155,13 @@ export class InterfaceType extends Type {
         pre: {
             introspectionType.kind === 'INTERFACE';
             Array.isArray(introspectionType.fields);
-            Array.isArray(introspectionType.possibleTypes);
+            !introspectionType.possibleTypes || Array.isArray(introspectionType.possibleTypes);
         }
 
         super(introspectionType);
 
         this.fields = introspectionType.fields.map(f => new Field(f));
-        this.possibleTypes = introspectionType.possibleTypes.map(r => TypeRef.fromIntrospectionRef(r));
+        this.possibleTypes = (introspectionType.possibleTypes || []).map(r => TypeRef.fromIntrospectionRef(r));
     }
 }
 
@@ -182,6 +200,8 @@ export class Field {
     description: ?string;
     args: Array<InputValue>;
     type: TypeRef;
+    isDeprecated: bool;
+    deprecationReason: ?string;
 
     constructor(introspectionField: any) {
         pre: {
@@ -189,12 +209,16 @@ export class Field {
             introspectionField.description === null || typeof introspectionField.description === 'string';
             introspectionField.type;
             Array.isArray(introspectionField.args);
+            !introspectionField.isDeprecated || typeof introspectionField.deprecationReason === 'string';
+            introspectionField.isDeprecated || introspectionField.deprecationReason === null;
         }
 
         this.name = introspectionField.name;
         this.description = introspectionField.description;
         this.args = introspectionField.args.map(a => new InputValue(a));
         this.type = TypeRef.fromIntrospectionRef(introspectionField.type);
+        this.isDeprecated = introspectionField.isDeprecated;
+        this.deprecationReason = introspectionField.deprecationReason;
     }
 }
 

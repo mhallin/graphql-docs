@@ -2,9 +2,10 @@
 
 import React from 'react';
 
-import { ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
+import { ObjectType, InterfaceType, UnionType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
 
 import { DescriptionView } from './DescriptionView';
+import { DeprecatedView } from './DeprecatedView';
 import { FieldView } from './FieldView';
 import { TypeRefView } from './TypeRefView';
 import { FieldArgumentsTableView } from './FieldArgumentsTableView';
@@ -30,6 +31,23 @@ export class ObjectDocsView extends React.Component {
                 {renderInterfaces(type.interfaces)}
                 {renderFields(type.fields)}
             </div>
+        );
+    }
+}
+
+export class UnionDocsView extends React.Component {
+    props: {
+        type: UnionType,
+    };
+
+    render() {
+        const type = this.props.type;
+        return (
+          <div className={StyleSheet.type}>
+            {renderTitle(type.name)}
+            {renderDescription(type.description)}
+            {renderPossibleTypes(type.possibleTypes)}
+          </div>
         );
     }
 }
@@ -107,10 +125,10 @@ export class InputObjectDocsView extends React.Component {
 
 function renderTitle(typeName: string, titleOverride: ?string = null) {
     return (
-        <h2 className={StyleSheet.heading}>
+        <h3 className={StyleSheet.heading}>
             <a name={typeName} />
             {titleOverride || typeName}
-        </h2>
+        </h3>
     );
 }
 
@@ -159,6 +177,26 @@ function renderInterfaces(interfaces: Array<TypeRef>) {
     );
 }
 
+function renderPossibleTypes(possibleTypes: Array<TypeRef>) {
+    if (!possibleTypes.length) {
+        return null;
+    }
+
+    return (
+    <div>
+        <div className={StyleSheet.subHeading}>
+            Possible Types
+        </div>
+        <ul className={StyleSheet.interfacesList}>
+            {possibleTypes.map((r, i) =>
+                <li key={i}>
+                    <TypeRefView key={i} typeRef={r} />
+                </li>)}
+        </ul>
+    </div>
+    );
+}
+
 function renderImplementors(possibleTypes: Array<TypeRef>) {
     if (!possibleTypes.length) {
         return null;
@@ -199,13 +237,16 @@ function renderEnumValues(enumValues: Array<EnumValue>) {
                             className={StyleSheet.enumRow}
                         >
                             <td
-                                className={StyleSheet.enumName}
+                                className={v.isDeprecated ? StyleSheet.enumNameDeprecated : StyleSheet.enumName}
                             >
                                 {v.name}
                             </td>
                             <td>
-                                {v.description &&
-                                    <DescriptionView description={v.description} />}
+                              {
+                                  (v.isDeprecated && <DeprecatedView reason={v.deprecationReason} />)
+                                  ||
+                                  (v.description && <DescriptionView description={v.description} />)
+                              }
                             </td>
                         </tr>
                     )}

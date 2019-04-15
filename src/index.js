@@ -22,6 +22,7 @@ export class GraphQLDocs extends React.Component {
         const promise = this.props.fetcher(introspectionQuery);
 
         promise.then(json => {
+            console.log(new Schema(json.data));
             this.setState({
                 schema: new Schema(json.data),
             });
