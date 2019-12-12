@@ -6,6 +6,7 @@ export const TYPE_KINDS = [
     'OBJECT',
     'ENUM',
     'INPUT_OBJECT',
+    'UNION',
 ];
 
 export type TypeId = string;
@@ -79,6 +80,8 @@ export class Type {
             return new EnumType(introspectionType);
         } else if (introspectionType.kind === 'INPUT_OBJECT') {
             return new InputObjectType(introspectionType);
+        } else if (introspectionType.kind === 'UNION') {
+            return new UnionType(introspectionType);
         } else {
             throw new Error('Unsupported type kind: ' + introspectionType.kind);
         }
@@ -127,6 +130,20 @@ export class ScalarType extends Type {
 
         super(introspectionType);
     }
+}
+
+export class UnionType extends Type {
+    possibleTypes: Array<TypeRef>;
+    constructor(introspectionType: any) {
+        pre: {
+            introspectionType.kind === 'UNION';
+            Array.isArray(introspectionType.possibleTypes);
+        }
+
+        super(introspectionType);
+        this.possibleTypes = introspectionType.possibleTypes.map(r => TypeRef.fromIntrospectionRef(r));
+    }
+
 }
 
 export class InterfaceType extends Type {

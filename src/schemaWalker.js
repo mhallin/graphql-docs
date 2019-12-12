@@ -1,6 +1,6 @@
 // @flow
 
-import { Type, Schema, ObjectType, InterfaceType, InputObjectType, Field, TypeRef, NonNullTypeRef, NamedTypeRef, ListTypeRef } from './model';
+import { Type, Schema, ObjectType, InterfaceType, InputObjectType, Field, TypeRef, NonNullTypeRef, NamedTypeRef, ListTypeRef, UnionType } from './model';
 import type { TypeId } from './model';
 
 
@@ -54,6 +54,10 @@ function getReferencesInType(type: Type): Bag {
 
     if (type instanceof InputObjectType) {
         type.inputFields.forEach(iv => addTypeRefToBag(iv.type, refs));
+    }
+
+    if (type instanceof UnionType) {
+        type.possibleTypes.forEach(r => addTypeRefToBag(r, refs));
     }
 
     return refs;
