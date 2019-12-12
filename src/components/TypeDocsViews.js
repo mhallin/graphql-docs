@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue } from '../model';
+import { ObjectType, InterfaceType, EnumType, ScalarType, InputObjectType, Field, TypeRef, EnumValue, UnionType } from '../model';
 
 import { DescriptionView } from './DescriptionView';
 import { FieldView } from './FieldView';
@@ -80,6 +80,22 @@ export class ScalarDocsView extends React.Component {
             <div className={StyleSheet.type}>
                 {renderTitle(type.name)}
                 {renderDescription(type.description)}
+            </div>
+        );
+    }
+}
+export class UnionDocsView extends React.Component {
+    props: {
+        type: UnionType,
+    };
+
+    render() {
+        const type = this.props.type;
+        return (
+            <div className={StyleSheet.type}>
+                {renderTitle(type.name)}
+                {renderDescription(type.description)}
+                {renderPossibleTypes(type.possibleTypes)}
             </div>
         );
     }
@@ -179,7 +195,26 @@ function renderImplementors(possibleTypes: Array<TypeRef>) {
         </div>
     );
 }
+function renderPossibleTypes(possibleTypes: Array<TypeRef>) {
+    if (!possibleTypes.length) {
+        return null;
+    }
 
+    return (
+        <div>
+            <div className={StyleSheet.subHeading}>
+                Possible Types
+            </div>
+
+            <ul className={StyleSheet.interfacesList}>
+                {possibleTypes.map((r, i) =>
+                    <li key={i}>
+                        <TypeRefView key={i} typeRef={r} />
+                    </li>)}
+            </ul>
+        </div>
+    );
+}
 function renderEnumValues(enumValues: Array<EnumValue>) {
     if (!enumValues.length) {
         return null;
